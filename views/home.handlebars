@@ -1,0 +1,2817 @@
+<div id="container">
+  <div class="banner-container">
+    <!-- Cửa sổ trang trí -->
+    <div class="window-left"></div>
+    <div class="window-right"></div>
+    
+    <div class="banner">
+      <button class="banner-btn banner-prev" id="bannerPrev">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="banner-track" id="bannerTrack">
+        <img src="/image/img1.webp" alt="Ad 1">
+        <img src="/image/img2.webp" alt="Ad 2">
+        <img src="/image/img3.webp" alt="Ad 3">
+        <img src="/image/img4.webp" alt="Ad 4">
+      </div>
+      <button class="banner-btn banner-next" id="bannerNext">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    <div class="banner-dots" id="bannerDots"></div>
+  </div>
+
+  <div id="wrapper">
+    <!-- FLASH SALE Section - Tab Switching for Multiple Events -->
+    {{#if flashSaleEvents}}
+    {{#if flashSaleEvents.length}}
+    <div class="flash-sale-wrapper">
+      <!-- Flash Sale Tabs -->
+      {{#if (gt flashSaleEvents.length 1)}}
+      <div class="flash-sale-tabs-container">
+        <button class="tab-slide-btn tab-slide-prev">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="flash-sale-tabs-wrapper">
+          <div class="flash-sale-tabs">
+            {{#each flashSaleEvents}}
+            <button class="flash-tab {{#if @first}}active{{/if}}" data-tab="flash-{{@index}}" data-tab-index="{{@index}}">
+              <i class="fas fa-bolt"></i>
+              <span class="tab-title">{{this.info.ten_flash_sale}}</span>
+              {{#if this.info.is_active}}
+              <span class="tab-status active-status">ĐANG DIỄN RA</span>
+              {{else}}
+              <span class="tab-status upcoming-status">SẮP DIỄN RA</span>
+              {{/if}}
+            </button>
+            {{/each}}
+          </div>
+        </div>
+        <button class="tab-slide-btn tab-slide-next">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="flash-tabs-dots">
+          {{#each flashSaleEvents}}
+          <span class="tab-dot {{#if @first}}active{{/if}}" data-slide="{{@index}}"></span>
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+      
+      <!-- Flash Sale Content -->
+      {{#each flashSaleEvents}}
+      <div class="flash-sale-content {{#if @first}}active{{/if}}" id="flash-{{@index}}">
+        <div class="flash-sale-header">
+          <div class="flash-header-content">
+            <!-- Title Section - Top -->
+            <div class="flash-title-section">
+              <div class="flash-icon-wrapper">
+                <i class="fas fa-bolt flash-bolt-icon"></i>
+              </div>
+              <div class="flash-title-text">
+                <h1 class="flash-main-title">{{this.info.ten_flash_sale}}</h1>
+                <p class="flash-subtitle" style="white-space: pre-line;">{{this.info.mo_ta}}</p>
+              </div>
+            </div>
+            
+            <!-- Countdown Timer - Bottom -->
+            <div class="flash-time-info">
+              {{#if this.info.is_active}}
+              <!-- Flash Sale đang diễn ra - Chỉ hiển thị countdown -->
+              <div class="flash-countdown-wrapper active-countdown" data-end-time="{{this.info.ngay_ket_thuc}}">
+                <div class="countdown-header">
+                  <i class="fas fa-fire-alt countdown-fire-icon"></i>
+                  <div class="countdown-label">ĐANG DIỄN RA - KẾT THÚC SAU</div>
+                  <i class="fas fa-fire-alt countdown-fire-icon"></i>
+                </div>
+                <div class="countdown-timer">
+                  <div class="timer-unit">
+                    <span class="timer-number countdown-days">00</span>
+                    <span class="timer-text">Ngày</span>
+                  </div>
+                  <span class="timer-separator">:</span>
+                  <div class="timer-unit">
+                    <span class="timer-number countdown-hours">00</span>
+                    <span class="timer-text">Giờ</span>
+                  </div>
+                  <span class="timer-separator">:</span>
+                  <div class="timer-unit">
+                    <span class="timer-number countdown-minutes">00</span>
+                    <span class="timer-text">Phút</span>
+                  </div>
+                  <span class="timer-separator">:</span>
+                  <div class="timer-unit">
+                    <span class="timer-number countdown-seconds">00</span>
+                    <span class="timer-text">Giây</span>
+                  </div>
+                </div>
+              </div>
+              {{else}}
+              <!-- Flash Sale sắp diễn ra - Countdown đến khi bắt đầu -->
+              <div class="flash-countdown-wrapper upcoming-countdown" data-start-time="{{this.info.ngay_bat_dau}}">
+                <div class="countdown-header">
+                  <i class="far fa-clock countdown-clock-icon"></i>
+                  <div class="countdown-label">SẮP DIỄN RA - BẮT ĐẦU SAU</div>
+                  <i class="far fa-clock countdown-clock-icon"></i>
+                </div>
+                <div class="countdown-timer">
+                  <div class="timer-unit">
+                    <span class="timer-number countdown-days">00</span>
+                    <span class="timer-text">Ngày</span>
+                  </div>
+                  <span class="timer-separator">:</span>
+                  <div class="timer-unit">
+                    <span class="timer-number countdown-hours">00</span>
+                    <span class="timer-text">Giờ</span>
+                  </div>
+                  <span class="timer-separator">:</span>
+                  <div class="timer-unit">
+                    <span class="timer-number countdown-minutes">00</span>
+                    <span class="timer-text">Phút</span>
+                  </div>
+                  <span class="timer-separator">:</span>
+                  <div class="timer-unit">
+                    <span class="timer-number countdown-seconds">00</span>
+                    <span class="timer-text">Giây</span>
+                  </div>
+                </div>
+              </div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+
+        <!-- Flash Products Slider -->
+        <div class="flash-products-slider-wrapper">
+          <button class="flash-slider-btn flash-prev" data-flash-index="{{@index}}">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          
+          <div class="flash-products-slider" data-flash-index="{{@index}}">
+            <div class="flash-products-track" data-flash-index="{{@index}}">
+              {{#each this.items}}
+              <div class="flash-product-card">
+            <!-- Flash Badge -->
+            <div class="flash-discount-badge">
+              <i class="fas fa-bolt"></i>
+              <span>-{{this.phan_tram_giam}}%</span>
+            </div>
+            
+            {{#if this.is_hot}}
+            <div class="flash-hot-badge">
+              <i class="fas fa-fire"></i> HOT
+            </div>
+            {{/if}}
+
+            <a href="/product/{{this.product_id}}?variant={{this.id}}" class="flash-product-link">
+              <!-- Hình ảnh -->
+              <div class="flash-product-image">
+                <img src="{{this.link_anh}}" alt="{{this.ten_variant}}" loading="lazy">
+                <div class="flash-image-overlay">
+                  <i class="fas fa-bolt"></i>
+                </div>
+              </div>
+
+              <!-- Tên sản phẩm -->
+              <h3 class="flash-product-name">{{this.ten_variant}}</h3>
+
+              <!-- Giá -->
+              <div class="flash-price-wrapper">
+                <div class="flash-current-price">{{this.gia_ban_formatted}}</div>
+                <div class="flash-original-price">{{this.gia_goc_formatted}}</div>
+              </div>
+
+              <!-- Thanh tiến trình bán -->
+              <div class="flash-progress-section">
+                <div class="flash-progress-bar">
+                  <div class="flash-progress-fill" style="width: {{this.da_ban_percent}}%"></div>
+                </div>
+                <div class="flash-stock-info">
+                  {{#if this.is_low_stock}}
+                  <span class="flash-stock-text low-stock">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Chỉ còn {{this.con_lai}}
+                  </span>
+                  {{else}}
+                  <span class="flash-stock-text">
+                    <i class="fas fa-fire-alt"></i>
+                    Đã bán {{this.da_ban}}
+                  </span>
+                  {{/if}}
+                  <span class="flash-percent">{{this.da_ban_percent}}%</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Nút hành động -->
+            <div class="flash-actions">
+              <button class="flash-btn-cart" data-product-id="{{this.product_id}}" data-variant-id="{{this.id}}" title="Thêm vào giỏ">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+              <a href="/product/{{this.product_id}}?variant={{this.id}}" class="flash-btn-buy">
+                <i class="fas fa-bolt"></i>
+                MUA NGAY
+              </a>
+            </div>
+          </div>
+          {{/each}}
+            </div>
+          </div>
+          
+          <button class="flash-slider-btn flash-next" data-flash-index="{{@index}}">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          <div class="flash-products-dots" data-flash-index="{{@index}}"></div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+    {{/if}} 
+
+    <!-- Brand Sections - Dynamic from Database -->
+    {{#each brandSections}}
+    <div class="brand-section" data-aos="fade-up" data-aos-duration="800">
+      <!-- Brand Header -->
+      <div class="brand-header">
+        <div class="brand-header-left">
+          <!-- Brand Icon/Logo -->
+          <div class="brand-icon-wrapper" style="background: linear-gradient(135deg, {{#if this.primary_color}}{{this.primary_color}}{{else}}#667eea{{/if}} 0%, {{#if this.secondary_color}}{{this.secondary_color}}{{else}}#764ba2{{/if}} 100%);">
+            {{#if this.logo_url}}
+              <img src="{{this.logo_url}}" alt="{{this.ten_thuong_hieu}}" class="brand-logo">
+            {{else}}
+              <i class="fas fa-mobile-alt"></i>
+            {{/if}}
+          </div>
+          
+          <!-- Brand Title & Subtitle -->
+          <div class="brand-title-wrapper">
+            <h2 class="brand-title">{{this.ten_thuong_hieu}}</h2>
+            <p class="brand-subtitle">{{#if this.mo_ta}}{{this.mo_ta}}{{else}}Khám phá sản phẩm chất lượng{{/if}}</p>
+          </div>
+        </div>
+        
+        <div class="brand-header-right">
+          <a href="/brand/{{this.slug}}" class="btn-view-all">
+            Xem tất cả <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Products Grid -->
+      <div class="brand-products-grid">
+        {{#if this.products}}
+          {{#each this.products}}
+            {{> product}}
+          {{/each}}
+        {{else}}
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <p>Chưa có sản phẩm {{../this.ten_thuong_hieu}}</p>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+    {{/each}}
+
+    <!-- All Products Section -->
+    <div class="brand-section all-products-section" data-aos="fade-up" data-aos-duration="800">
+      <div class="brand-header">
+        <div class="brand-header-left">
+          <div class="brand-icon-wrapper all-brand">
+            <i class="fas fa-th"></i>
+          </div>
+          
+          <div class="brand-title-wrapper">
+            <h2 class="brand-title">TẤT CẢ SẢN PHẨM</h2>
+            <p class="brand-subtitle">Khám phá toàn bộ sản phẩm</p>
+          </div>
+        </div>
+        
+        <div class="brand-header-right">
+          <a href="/products" class="btn-view-all">
+            Xem tất cả <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div class="brand-products-grid">
+        {{#if sanphams}}
+          {{#each sanphams}}
+            {{> product}}
+          {{/each}}
+        {{else}}
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <p>Không có sản phẩm nào</p>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CSS cho Flash Sale Section -->
+<style>
+/* ========================================
+   FLASH SALE PREMIUM DESIGN - CellphoneS Style
+   ======================================== */
+
+.flash-sale-wrapper {
+  width: 95%;
+  max-width: 2400px;
+  margin: 30px auto 40px;
+  padding: 0;
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 3px solid transparent;
+  background-image: 
+    linear-gradient(white, white),
+    linear-gradient(135deg, #d70018, #ff6b6b, #ff4444, #d70018);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.flash-sale-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  background: linear-gradient(135deg, #d70018, #ff6b6b, #ff4444, #d70018);
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0.15;
+  filter: blur(8px);
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.flash-sale-wrapper::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #d70018, #ff6b6b, #ff4444, #d70018);
+  border-radius: 18px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: border-gradient 4s linear infinite;
+  background-size: 200% 200%;
+}
+
+.flash-sale-wrapper:hover::after {
+  opacity: 0.4;
+}
+
+/* Flash Sale Tabs */
+.flash-sale-tabs-container {
+  position: relative;
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  border-bottom: 2px solid rgba(215, 0, 24, 0.1);
+  padding: 20px 60px 50px;
+}
+
+.flash-sale-tabs-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.flash-sale-tabs {
+  display: flex;
+  gap: 10px;
+  transition: transform 0.5s ease;
+  position: relative;
+  z-index: 3;
+}
+
+.tab-slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #d70018, #ff0033);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(215, 0, 24, 0.4);
+  transition: all 0.3s ease;
+  opacity: 0.9;
+}
+
+.tab-slide-btn:hover {
+  background: linear-gradient(135deg, #ff0033, #ff6b6b);
+  box-shadow: 0 6px 20px rgba(215, 0, 24, 0.6);
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+.tab-slide-prev {
+  left: 10px;
+}
+
+.tab-slide-next {
+  right: 10px;
+}
+
+.flash-tabs-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+
+.tab-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(215, 0, 24, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-dot.active {
+  background: #d70018;
+  width: 30px;
+  border-radius: 5px;
+}
+
+.tab-dot:hover {
+  background: rgba(215, 0, 24, 0.6);
+}
+
+.flash-tab {
+  background: #fff;
+  border: 2px solid rgba(215, 0, 24, 0.2);
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: auto;
+  min-width: 180px;
+  max-width: 350px;
+  flex: 0 0 auto;
+}
+
+.flash-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(215, 0, 24, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.flash-tab:hover::before {
+  left: 100%;
+}
+
+.flash-tab i {
+  font-size: 16px;
+  color: #d70018;
+  animation: bolt-wiggle 2s infinite;
+}
+
+.flash-tab .tab-title {
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+.flash-tab .tab-status {
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-left: 5px;
+}
+
+.flash-tab .active-status {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  animation: pulse-status 2s infinite;
+}
+
+.flash-tab .upcoming-status {
+  background: linear-gradient(135deg, #ffc107, #ff9800);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+@keyframes pulse-status {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.flash-tab:hover {
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  border-color: #d70018;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(215, 0, 24, 0.2);
+}
+
+.flash-tab.active {
+  background: linear-gradient(135deg, #d70018 0%, #ff0033 100%);
+  color: #fff;
+  border-color: #d70018;
+  box-shadow: 
+    0 0 20px rgba(215, 0, 24, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+}
+
+.flash-tab.active i {
+  color: #fff;
+}
+
+.flash-tab.active .tab-title {
+  color: #fff;
+}
+
+.flash-tab.active .active-status,
+.flash-tab.active .upcoming-status {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Flash Sale Content */
+.flash-sale-content {
+  display: none;
+}
+
+.flash-sale-content.active {
+  display: block;
+}
+
+/* Flash Sale Header */
+.flash-sale-header {
+  position: relative;
+  z-index: 2;
+  padding: 30px;
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  border-bottom: 2px solid rgba(215, 0, 24, 0.1);
+}
+
+.flash-header-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* Title Section - Top */
+.flash-title-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  flex-shrink: 0;
+  width: 100%;
+  justify-content: center;
+}
+
+.flash-icon-wrapper {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #d70018, #ff0033);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(215, 0, 24, 0.3);
+  box-shadow: 
+    0 0 20px rgba(215, 0, 24, 0.3),
+    0 8px 25px rgba(0, 0, 0, 0.15);
+  animation: pulse-icon 2s infinite;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.flash-icon-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(215, 0, 24, 0.2);
+  animation: spin-border 3s linear infinite;
+}
+
+@keyframes spin-border {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-icon {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  50% { 
+    transform: scale(1.08);
+    box-shadow: 0 12px 35px rgba(215, 0, 24, 0.3);
+  }
+}
+
+.flash-bolt-icon {
+  font-size: 36px;
+  color: #fff;
+  animation: bolt-glow 1.5s infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes bolt-glow {
+  0%, 100% { filter: brightness(1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)); }
+  50% { filter: brightness(1.2) drop-shadow(0 2px 8px rgba(255, 255, 255, 0.4)); }
+}
+
+.flash-title-text {
+  color: #2c3e50;
+  text-align: center;
+}
+
+.flash-main-title {
+  font-size: 60px;
+  font-weight: 900;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #d70018;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  line-height: 1.2;
+}
+
+.flash-subtitle {
+  margin: 5px 0 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
+  letter-spacing: 1.5px;
+}
+
+/* Time Information - Bottom */
+.flash-time-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.flash-time-block {
+  background: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 2px solid rgba(215, 0, 24, 0.2);
+  min-width: 140px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 1;
+  transition: all 0.3s ease;
+}
+
+.flash-time-block:hover {
+  border-color: #d70018;
+  box-shadow: 0 4px 15px rgba(215, 0, 24, 0.15);
+  transform: translateY(-2px);
+}
+
+.flash-time-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(215, 0, 24, 0.05), transparent);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  to { left: 100%; }
+}
+
+.time-label {
+  color: #666;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.time-label i {
+  margin-right: 4px;
+  font-size: 10px;
+  color: #d70018;
+}
+
+.time-value {
+  color: #2c3e50;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* Flash Upcoming Time - For Future Events */
+.flash-upcoming-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  width: 100%;
+  padding: 20px;
+  background: #fff;
+  border-radius: 14px;
+  border: 2px solid rgba(215, 0, 24, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.upcoming-icon {
+  font-size: 60px;
+  color: #d70018;
+  animation: pulse-icon 2s infinite;
+}
+
+.upcoming-time-blocks {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.upcoming-time-block {
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 2px solid rgba(215, 0, 24, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.upcoming-time-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(215, 0, 24, 0.05), transparent);
+  animation: shine 4s infinite;
+}
+
+.upcoming-time-block:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  border-color: #d70018;
+}
+
+.upcoming-time-block.highlight-start {
+  border-left: 4px solid #28a745;
+}
+
+.upcoming-time-block.highlight-end {
+  border-left: 4px solid #dc3545;
+}
+
+.upcoming-time-label {
+  color: #666;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.upcoming-time-label i {
+  font-size: 14px;
+}
+
+.highlight-start .upcoming-time-label {
+  color: #28a745;
+}
+
+.highlight-end .upcoming-time-label {
+  color: #dc3545;
+}
+
+.upcoming-time-value {
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.4;
+  background: rgba(215, 0, 24, 0.05);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.upcoming-arrow {
+  font-size: 32px;
+  color: #d70018;
+  animation: arrow-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes arrow-pulse {
+  0%, 100% {
+    transform: scale(1) translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15) translateX(5px);
+    opacity: 0.7;
+  }
+}
+
+/* Active Countdown - Horizontal Right Side */
+.flash-countdown-wrapper.active-countdown {
+  padding: 30px 45px;
+  background: linear-gradient(135deg, #d70018 0%, #ff0033 50%, #ff6b6b 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 0 30px rgba(215, 0, 24, 0.4),
+    0 10px 25px rgba(0, 0, 0, 0.2),
+    inset 0 2px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Upcoming Countdown - Blue/Green Theme */
+.flash-countdown-wrapper.upcoming-countdown {
+  padding: 30px 45px;
+  background: linear-gradient(135deg, #0288d1 0%, #00acc1 50%, #26c6da 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 0 30px rgba(2, 136, 209, 0.4),
+    0 10px 25px rgba(0, 0, 0, 0.2),
+    inset 0 2px 15px rgba(255, 255, 255, 0.2);
+}
+
+.flash-countdown-wrapper.upcoming-countdown::before {
+  background: linear-gradient(45deg, #0288d1, #00acc1, #26c6da, #0288d1);
+  background-size: 300% 300%;
+}
+
+.flash-countdown-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #d70018, #ff0033, #ff6b6b, #d70018);
+  background-size: 300% 300%;
+  border-radius: 17px;
+  z-index: -1;
+  animation: gradient-shift 3s ease infinite;
+  filter: blur(10px);
+  opacity: 0.5;
+}
+
+.flash-countdown-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shine-sweep 3s infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes shine-sweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Countdown Header with Fire Icons */
+.countdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.countdown-fire-icon {
+  font-size: 28px;
+  color: #FFD700;
+  animation: fire-flicker 1.5s infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+}
+
+.countdown-clock-icon {
+  font-size: 28px;
+  color: #FFD700;
+  animation: clock-tick 2s infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+}
+
+@keyframes fire-flicker {
+  0%, 100% {
+    transform: scale(1) rotate(-5deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15) rotate(5deg);
+    opacity: 0.85;
+  }
+}
+
+@keyframes clock-tick {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-10deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(0deg) scale(1);
+  }
+  75% {
+    transform: rotate(10deg) scale(1.05);
+  }
+}
+
+.countdown-label {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(255, 215, 0, 0.4);
+  position: relative;
+  z-index: 1;
+}
+
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.timer-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.timer-unit::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.timer-unit:hover::before {
+  opacity: 1;
+}
+
+.timer-number {
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  color: #d70018;
+  padding: 25px 35px;
+  border-radius: 20px;
+  font-size: 68px;
+  font-weight: 900;
+  min-width: 130px;
+  text-align: center;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.25),
+    inset 0 2px 8px rgba(255, 255, 255, 0.9);
+  font-family: 'Arial Black', 'Arial', sans-serif;
+  position: relative;
+  transition: all 0.3s ease;
+  animation: number-pulse 2s ease-in-out infinite;
+}
+
+@keyframes number-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.timer-unit:hover .timer-number {
+  transform: scale(1.1) rotate(-2deg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.timer-text {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 12px;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.timer-separator {
+  color: #FFD700;
+  font-size: 56px;
+  font-weight: 900;
+  text-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(255, 215, 0, 0.6);
+  animation: blink 1.2s ease-in-out infinite;
+  line-height: 1;
+  padding: 0 3px;
+}
+
+@keyframes blink {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+}
+
+/* Flash Products Slider - Horizontal Scrolling */
+.flash-products-slider-wrapper {
+  position: relative;
+  padding: 30px 60px 50px;
+  background: #fff;
+  border-radius: 0 0 16px 16px;
+}
+
+.flash-products-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+
+.flash-product-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(215, 0, 24, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.flash-product-dot.active {
+  background: linear-gradient(135deg, #d70018, #ff0033);
+  width: 30px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(215, 0, 24, 0.4);
+}
+
+.flash-product-dot:hover {
+  background: rgba(215, 0, 24, 0.6);
+}
+
+.flash-products-slider {
+  overflow: hidden;
+  position: relative;
+}
+
+.flash-products-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.5s ease;
+  padding: 10px 0;
+}
+
+/* Flash Products Slider Navigation Buttons */
+.flash-slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #d70018, #ff0033);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(215, 0, 24, 0.4);
+  transition: all 0.3s ease;
+}
+
+.flash-slider-btn:hover {
+  background: linear-gradient(135deg, #ff0033, #ff6b6b);
+  box-shadow: 0 6px 20px rgba(215, 0, 24, 0.6);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.flash-slider-btn.flash-prev {
+  left: 10px;
+}
+
+.flash-slider-btn.flash-next {
+  right: 10px;
+}
+
+.flash-slider-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: #ccc;
+}
+
+.flash-slider-btn:disabled:hover {
+  transform: translateY(-50%) scale(1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Flash Product Card - Dựa trên CellphoneS Design */
+.flash-product-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid #FF3366;
+  display: flex;
+  flex-direction: column;
+  width: 234px;
+  min-width: 234px;
+  height: 380px;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(255, 51, 102, 0.15);
+  flex-shrink: 0;
+}
+
+.flash-product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(255, 51, 102, 0.3);
+  border-color: #FF6B35;
+}
+
+.flash-product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FF3366, #FF6B35, #F7931E);
+  z-index: 3;
+}
+
+.flash-product-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Flash Badges */
+.flash-discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 8px;
+  background: linear-gradient(135deg, #FF3366, #FF6B35);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 12px rgba(255, 51, 102, 0.4);
+  animation: flash-pulse 2s infinite;
+}
+
+@keyframes flash-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(255, 51, 102, 0.4);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 51, 102, 0.6);
+  }
+}
+
+.flash-discount-badge i {
+  font-size: 13px;
+  animation: bolt-wiggle 1s infinite;
+}
+
+@keyframes bolt-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+.flash-hot-badge {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  background: linear-gradient(135deg, #FF6B00, #FF0033);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 12px rgba(255, 0, 51, 0.4);
+  animation: hot-glow 1.5s infinite;
+}
+
+@keyframes hot-glow {
+  0%, 100% { 
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% { 
+    transform: scale(1.08);
+    filter: brightness(1.2);
+  }
+}
+
+/* Flash Image */
+.flash-product-image {
+  position: relative;
+  height: 180px;
+  background: linear-gradient(135deg, #fff5f7, #fff);
+  overflow: hidden;
+}
+
+.flash-product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+  transition: transform 0.3s ease;
+}
+
+.flash-product-card:hover .flash-product-image img {
+  transform: scale(1.1);
+}
+
+.flash-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 51, 102, 0.95), rgba(255, 107, 53, 0.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.flash-product-card:hover .flash-image-overlay {
+  opacity: 1;
+}
+
+.flash-image-overlay i {
+  color: #fff;
+  font-size: 36px;
+  animation: bolt-spin 1s ease-in-out;
+}
+
+@keyframes bolt-spin {
+  from { transform: rotate(0deg) scale(0.5); opacity: 0; }
+  to { transform: rotate(360deg) scale(1); opacity: 1; }
+}
+
+/* Flash Product Name */
+.flash-product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin: 10px 10px 8px;
+  line-height: 1.3;
+  height: 2.6em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.flash-product-card:hover .flash-product-name {
+  color: #FF3366;
+}
+
+/* Flash Price */
+.flash-price-wrapper {
+  margin: 0 10px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flash-current-price {
+  font-size: 16px;
+  font-weight: 800;
+  color: #FF3366;
+  text-shadow: 0 1px 2px rgba(255, 51, 102, 0.2);
+}
+
+.flash-original-price {
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+/* Flash Progress Section */
+.flash-progress-section {
+  margin: 0 10px 10px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.flash-progress-bar {
+  height: 18px;
+  background: linear-gradient(to right, #f5f5f5, #e8e8e8);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.flash-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FF6B35, #FF3366);
+  border-radius: 20px;
+  transition: width 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.flash-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: progress-shimmer 2s infinite;
+}
+
+@keyframes progress-shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.flash-stock-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.flash-stock-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #666;
+  font-weight: 600;
+  padding: 3px 8px;
+  background: #f5f5f5;
+  border-radius: 12px;
+}
+
+.flash-stock-text i {
+  font-size: 10px;
+  color: #FF6B35;
+}
+
+.flash-stock-text.low-stock {
+  background: linear-gradient(135deg, #FF3366, #FF0033);
+  color: #fff;
+  font-weight: 700;
+  animation: warning-blink 1.5s infinite;
+}
+
+.flash-stock-text.low-stock i {
+  color: #fff;
+  animation: warning-shake 0.5s infinite;
+}
+
+@keyframes warning-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes warning-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+.flash-percent {
+  color: #FF3366;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+/* Flash Actions - Giống CPS Style */
+.flash-actions {
+  margin-top: auto;
+  padding: 0 10px 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.flash-btn-cart {
+  width: 40px;
+  height: 38px;
+  border: 2px solid #FF3366;
+  background: #fff;
+  border-radius: 8px;
+  color: #FF3366;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.flash-btn-cart:hover {
+  background: #FF3366;
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+}
+
+.flash-btn-cart:active {
+  transform: scale(0.95);
+}
+
+.flash-btn-buy {
+  flex: 1;
+  height: 38px;
+  border: none;
+  background: linear-gradient(135deg, #FF3366, #FF6B35);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+}
+
+.flash-btn-buy:hover {
+  background: linear-gradient(135deg, #e91e63, #f44336);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 51, 102, 0.4);
+}
+
+.flash-btn-buy:active {
+  transform: translateY(0);
+}
+
+.flash-btn-buy i {
+  font-size: 13px;
+  animation: bolt-beat 1s infinite;
+}
+
+@keyframes bolt-beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .flash-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+    padding: 25px;
+  }
+}
+
+@media (max-width: 992px) {
+  .flash-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .flash-time-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .flash-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .flash-sale-header {
+    padding: 20px 15px;
+  }
+  
+  .flash-main-title {
+    font-size: 24px;
+  }
+  
+  .flash-icon-wrapper {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .flash-bolt-icon {
+    font-size: 28px;
+  }
+  
+  .flash-time-info {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+  
+  .flash-time-block {
+    width: 100%;
+  }
+  
+  /* Active Countdown - Mobile */
+  .flash-countdown-wrapper.active-countdown {
+    padding: 20px 15px;
+  }
+  
+  .countdown-header {
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-fire-icon {
+    font-size: 20px;
+  }
+  
+  .countdown-label {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+  
+  .flash-countdown-wrapper {
+    width: 100%;
+    padding: 15px;
+  }
+  
+  .countdown-timer {
+    gap: 8px;
+  }
+  
+  .timer-number {
+    padding: 10px 12px;
+    font-size: 28px;
+    min-width: 60px;
+    border-width: 2px;
+  }
+  
+  .timer-text {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  
+  .timer-separator {
+    font-size: 32px;
+  }
+  
+  /* Upcoming Time - Mobile */
+  .flash-upcoming-time {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .upcoming-icon {
+    font-size: 45px;
+  }
+  
+  .upcoming-time-blocks {
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+  
+  .upcoming-arrow {
+    transform: rotate(90deg);
+    font-size: 24px;
+  }
+  
+  .upcoming-time-value {
+    font-size: 14px;
+  }
+  
+  .flash-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 15px;
+  }
+  
+  .flash-image {
+    height: 180px;
+  }
+  
+  .flash-product-name {
+    font-size: 14px;
+  }
+  
+  .flash-sale-price {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .flash-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 12px;
+  }
+  
+  .flash-image {
+    height: 150px;
+  }
+  
+  .flash-actions {
+    grid-template-columns: 1fr;
+  }
+  
+  .flash-cart-btn,
+  .flash-buy-btn {
+    font-size: 12px;
+    padding: 10px 6px;
+  }
+}
+
+/* ========================================
+   BRAND SECTIONS STYLING
+   ======================================== */
+
+.brand-section {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.brand-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #667eea, transparent);
+  transition: left 0.6s ease;
+}
+
+.brand-section:hover::before {
+  left: 100%;
+}
+
+.brand-section:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+/* Brand Header */
+.brand-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  padding-bottom: 25px;
+  border-bottom: 2px solid #f0f0f0;
+  position: relative;
+}
+
+.brand-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.4s ease;
+}
+
+.brand-section:hover .brand-header::after {
+  width: 200px;
+}
+
+.brand-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.brand-icon-wrapper {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-icon-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.brand-section:hover .brand-icon-wrapper::before {
+  width: 200%;
+  height: 200%;
+}
+
+.brand-section:hover .brand-icon-wrapper {
+  transform: rotate(360deg) scale(1.1);
+}
+
+.brand-icon-wrapper.all-brand {
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+}
+
+.brand-icon-wrapper i {
+  position: relative;
+  z-index: 2;
+}
+
+.brand-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.brand-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.brand-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  font-weight: 500;
+}
+
+.brand-header-right {
+  flex-shrink: 0;
+}
+
+.btn-view-all {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-view-all::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-view-all:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-view-all:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-view-all i {
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-view-all:hover i {
+  transform: translateX(5px);
+}
+
+/* Brand Products Grid - SỬ DỤNG GRID GIỐNG .products */
+.brand-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 234px);
+  gap: 15px;
+  padding: 20px 0;
+  justify-content: center;
+}
+
+/* Empty State */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  border-radius: 15px;
+}
+
+.empty-state i {
+  font-size: 80px;
+  color: #999;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 18px;
+  color: #666;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* All Products Section */
+.all-products-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.all-products-section .brand-header::after {
+  background: linear-gradient(90deg, #11998e, #38ef7d);
+}
+
+/* Responsive Brand Sections */
+@media (max-width: 1200px) {
+  .brand-section {
+    padding: 30px 25px;
+  }
+  
+  .brand-title {
+    font-size: 24px;
+  }
+  
+  .brand-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+  
+  .brand-logo {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .brand-products-grid {
+    grid-template-columns: repeat(auto-fill, 220px);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .brand-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .brand-header-right {
+    width: 100%;
+  }
+  
+  .btn-view-all {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .brand-products-grid {
+    grid-template-columns: repeat(auto-fill, 200px);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-section {
+    padding: 25px 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .brand-header {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+  }
+  
+  .brand-header-left {
+    gap: 15px;
+  }
+  
+  .brand-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+  
+  .brand-logo {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .brand-title {
+    font-size: 20px;
+  }
+  
+  .brand-subtitle {
+    font-size: 12px;
+  }
+  
+  .brand-products-grid {
+    grid-template-columns: repeat(auto-fill, 180px);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .brand-section {
+    padding: 20px 15px;
+  }
+  
+  .brand-header-left {
+    gap: 12px;
+  }
+  
+  .brand-icon-wrapper {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+  
+  .brand-logo {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .brand-title {
+    font-size: 18px;
+  }
+  
+  .btn-view-all {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .brand-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px 0;
+  }
+}
+</style>
+
+<!-- Modal xem nhanh sản phẩm -->
+<div class="product-quickview-modal" id="quickviewModal">
+  <div class="product-modal-content">
+    <span class="product-modal-close">&times;</span>
+    <div class="product-modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <img class="product-modal-image" id="modalProductImage" src="" alt="">
+        </div>
+        <div class="col-md-6">
+          <div class="product-modal-info">
+            <h3 id="modalProductName"></h3>
+            <p id="modalProductSKU" class="text-muted"></p>
+            <div id="modalProductPrice" class="modal-price"></div>
+            <div id="modalProductStock" class="modal-stock"></div>
+            <div class="modal-actions">
+              <button class="btn btn-primary">
+                <i class="fas fa-cart-plus me-2"></i> Thêm vào giỏ hàng
+              </button>
+              <button class="btn btn-success">
+                <i class="fas fa-bolt me-2"></i> Mua ngay
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // JavaScript cho chức năng banner và sản phẩm
+  document.addEventListener('DOMContentLoaded', function () {
+    
+    // =============================================
+    // TAB SLIDER - Hoàn toàn độc lập
+    // =============================================
+    (function initializeTabSlider() {
+      const tabsContainer = document.querySelector('.flash-sale-tabs');
+      if (!tabsContainer) return;
+      
+      const flashTabs = document.querySelectorAll('.flash-tab');
+      const flashContents = document.querySelectorAll('.flash-sale-content');
+      const tabDotsContainer = document.querySelector('.flash-tabs-dots');
+      const tabPrevBtn = document.querySelector('.tab-slide-prev');
+      const tabNextBtn = document.querySelector('.tab-slide-next');
+      
+      if (flashTabs.length === 0) return;
+      
+      let currentTabSlide = 0;
+      let tabAutoSlideInterval = null;
+      const TAB_AUTO_SLIDE_DURATION = 5000;
+      
+      // Auto-adjust tab widths based on content
+      function adjustTabWidths() {
+        flashTabs.forEach(tab => {
+          tab.style.width = 'auto';
+          tab.style.minWidth = '180px';
+          tab.style.maxWidth = '350px';
+          tab.style.flex = '0 0 auto';
+        });
+      }
+      
+      function getVisibleTabsCount() {
+        if (flashTabs.length === 0) return 1;
+        
+        const wrapper = tabsContainer.parentElement;
+        if (!wrapper) return 1;
+        
+        const wrapperWidth = wrapper.offsetWidth;
+        const buttonSpace = 120; // Space for prev/next buttons (60px each side)
+        const availableWidth = wrapperWidth - buttonSpace;
+        const gap = 10; // Gap between tabs
+        
+        let totalWidth = 0;
+        let count = 0;
+        
+        // Calculate how many tabs can fit
+        for (let i = 0; i < flashTabs.length; i++) {
+          const tabWidth = flashTabs[i].offsetWidth;
+          const widthNeeded = totalWidth + tabWidth + (i > 0 ? gap : 0);
+          
+          if (widthNeeded <= availableWidth) {
+            totalWidth = widthNeeded;
+            count++;
+          } else {
+            break;
+          }
+        }
+        
+        // Return at least 1 tab
+        return Math.max(1, count);
+      }
+      
+      function getTotalSlides() {
+        const visibleCount = getVisibleTabsCount();
+        const totalSlides = Math.ceil(flashTabs.length / visibleCount);
+        return Math.max(1, totalSlides);
+      }
+      
+      function getMaxSlide() {
+        const visibleCount = getVisibleTabsCount();
+        return Math.max(0, flashTabs.length - visibleCount);
+      }
+      
+      function updateTabSlider(slideIndex, animate = true) {
+        adjustTabWidths(); // Adjust widths first
+        
+        const visibleCount = getVisibleTabsCount();
+        const maxSlide = getMaxSlide();
+        
+        currentTabSlide = Math.max(0, Math.min(slideIndex, maxSlide));
+        
+        // Calculate offset based on actual tab widths
+        let offset = 0;
+        const gap = 10;
+        for (let i = 0; i < currentTabSlide; i++) {
+          offset += flashTabs[i].offsetWidth + gap;
+        }
+        
+        tabsContainer.style.transition = animate ? 'transform 0.5s ease' : 'none';
+        tabsContainer.style.transform = `translateX(-${offset}px)`;
+        
+        // Update tab dots - each dot represents a "page" of visible tabs
+        if (tabDotsContainer) {
+          const totalSlides = getTotalSlides();
+          const currentPage = Math.floor(currentTabSlide / visibleCount);
+          
+          const dots = tabDotsContainer.querySelectorAll('.tab-dot');
+          
+          // Always recreate dots to ensure sync
+          tabDotsContainer.innerHTML = '';
+          for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('span');
+            dot.className = `tab-dot ${i === currentPage ? 'active' : ''}`;
+            dot.dataset.slide = (i * visibleCount).toString();
+            tabDotsContainer.appendChild(dot);
+          }
+        }
+        
+        // Update buttons - always visible
+        if (tabPrevBtn) {
+          tabPrevBtn.style.display = 'flex';
+          tabPrevBtn.style.opacity = '1';
+          tabPrevBtn.style.pointerEvents = 'all';
+        }
+        if (tabNextBtn) {
+          tabNextBtn.style.display = 'flex';
+          tabNextBtn.style.opacity = '1';
+          tabNextBtn.style.pointerEvents = 'all';
+        }
+      }
+      
+      function startTabAutoSlide() {
+        stopTabAutoSlide();
+        tabAutoSlideInterval = setInterval(() => {
+          const maxSlide = getMaxSlide();
+          currentTabSlide = currentTabSlide + 1 > maxSlide ? 0 : currentTabSlide + 1;
+          updateTabSlider(currentTabSlide);
+        }, TAB_AUTO_SLIDE_DURATION);
+      }
+      
+      function stopTabAutoSlide() {
+        if (tabAutoSlideInterval) {
+          clearInterval(tabAutoSlideInterval);
+          tabAutoSlideInterval = null;
+        }
+      }
+      
+      // Tab click handlers
+      flashTabs.forEach((tab) => {
+        tab.addEventListener('click', function() {
+          stopTabAutoSlide();
+          
+          flashTabs.forEach(t => t.classList.remove('active'));
+          flashContents.forEach(c => c.classList.remove('active'));
+          
+          this.classList.add('active');
+          
+          const tabId = this.getAttribute('data-tab');
+          const content = document.getElementById(tabId);
+          if (content) {
+            content.classList.add('active');
+            
+            // Re-initialize product slider for active tab
+            const activeSlider = content.querySelector('.flash-products-slider');
+            if (activeSlider) {
+              const flashIndex = activeSlider.getAttribute('data-flash-index');
+              initializeProductSlider(flashIndex);
+            }
+          }
+          
+          startTabAutoSlide();
+        });
+      });
+      
+      // Tab prev/next buttons
+      if (tabPrevBtn) {
+        tabPrevBtn.addEventListener('click', () => {
+          stopTabAutoSlide();
+          const maxSlide = getMaxSlide();
+          const newSlide = currentTabSlide - 1 < 0 ? maxSlide : currentTabSlide - 1;
+          updateTabSlider(newSlide);
+          startTabAutoSlide();
+        });
+      }
+      
+      if (tabNextBtn) {
+        tabNextBtn.addEventListener('click', () => {
+          stopTabAutoSlide();
+          const maxSlide = getMaxSlide();
+          const newSlide = currentTabSlide + 1 > maxSlide ? 0 : currentTabSlide + 1;
+          updateTabSlider(newSlide);
+          startTabAutoSlide();
+        });
+      }
+      
+      // Tab dots click - jump to specific page
+      if (tabDotsContainer) {
+        tabDotsContainer.addEventListener('click', (e) => {
+          if (e.target.classList.contains('tab-dot')) {
+            stopTabAutoSlide();
+            const slideIndex = parseInt(e.target.getAttribute('data-slide'));
+            updateTabSlider(slideIndex);
+            startTabAutoSlide();
+          }
+        });
+      }
+      
+      // Pause on hover
+      const tabsContainerWrapper = document.querySelector('.flash-sale-tabs-container');
+      if (tabsContainerWrapper) {
+        tabsContainerWrapper.addEventListener('mouseenter', stopTabAutoSlide);
+        tabsContainerWrapper.addEventListener('mouseleave', startTabAutoSlide);
+      }
+      
+      // Handle window resize
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          stopTabAutoSlide();
+          adjustTabWidths();
+          updateTabSlider(currentTabSlide, false);
+          startTabAutoSlide();
+        }, 250);
+      });
+      
+      // Initialize
+      adjustTabWidths();
+      updateTabSlider(0, false);
+      startTabAutoSlide();
+    })();
+    
+    // Flash Sale Countdown Timers - Multiple Events
+    const countdownWrappers = document.querySelectorAll('.flash-countdown-wrapper');
+    
+    countdownWrappers.forEach(wrapper => {
+      // Check if it's active countdown (end-time) or upcoming countdown (start-time)
+      const endTimeAttr = wrapper.getAttribute('data-end-time');
+      const startTimeAttr = wrapper.getAttribute('data-start-time');
+      
+      const targetTime = new Date(endTimeAttr || startTimeAttr).getTime();
+      const isUpcoming = !!startTimeAttr;
+      
+      // Guard against invalid time (NaN) to prevent infinite reload
+      if (isNaN(targetTime)) {
+        console.error('Invalid countdown time:', { endTimeAttr, startTimeAttr });
+        wrapper.innerHTML = '<div class="countdown-label" style="padding: 15px; font-size: 16px;">⏰ THỜI GIAN KHÔNG HỢP LỆ</div>';
+        return; // Exit early, don't set up interval
+      }
+      
+      const daysEl = wrapper.querySelector('.countdown-days');
+      const hoursEl = wrapper.querySelector('.countdown-hours');
+      const minutesEl = wrapper.querySelector('.countdown-minutes');
+      const secondsEl = wrapper.querySelector('.countdown-seconds');
+      
+      function updateTimer() {
+        const now = new Date().getTime();
+        const distance = targetTime - now;
+        
+        if (distance < 0) {
+          // Active event has ended
+          wrapper.innerHTML = '<div class="countdown-label" style="padding: 15px; font-size: 16px;">⏰ ĐÃ KẾT THÚC</div>';
+          return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+        if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+        if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+        if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+      }
+      
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    });
+
+    
+    // =============================================
+    // PRODUCT SLIDER - Mỗi flash sale độc lập
+    // =============================================
+    const productSliders = {}; // Store slider instances
+    
+    function initializeProductSlider(flashIndex) {
+      const sliderWrapper = document.querySelector(`.flash-products-slider-wrapper:has([data-flash-index="${flashIndex}"])`);
+      if (!sliderWrapper) return;
+      
+      const slider = sliderWrapper.querySelector('.flash-products-slider');
+      const track = sliderWrapper.querySelector('.flash-products-track');
+      const cards = track?.querySelectorAll('.flash-product-card') || [];
+      const prevBtn = sliderWrapper.querySelector('.flash-prev');
+      const nextBtn = sliderWrapper.querySelector('.flash-next');
+      const dotsContainer = sliderWrapper.querySelector('.flash-products-dots');
+      
+      if (!track || cards.length === 0) return;
+      
+      // Stop previous instance if exists
+      if (productSliders[flashIndex]) {
+        clearInterval(productSliders[flashIndex].interval);
+      }
+      
+      const cardWidth = 234;
+      const gap = 20;
+      const itemWidth = cardWidth + gap;
+      let currentPosition = 0;
+      let autoSlideInterval = null;
+      const AUTO_SLIDE_DURATION = 4000;
+      
+      function calculateParams() {
+        const sliderWidth = slider.offsetWidth;
+        const visibleCards = Math.floor(sliderWidth / itemWidth);
+        const maxScroll = Math.max(0, cards.length - visibleCards);
+        return { visibleCards, maxScroll };
+      }
+      
+      let { visibleCards, maxScroll } = calculateParams();
+      
+      // Create dots
+      if (dotsContainer && maxScroll > 0) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i <= maxScroll; i++) {
+          const dot = document.createElement('span');
+          dot.className = `flash-product-dot ${i === 0 ? 'active' : ''}`;
+          dot.dataset.page = i;
+          dotsContainer.appendChild(dot);
+        }
+        dotsContainer.style.display = 'flex';
+      }
+      
+      // Hide if no scrolling needed
+      if (maxScroll === 0) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        if (dotsContainer) dotsContainer.style.display = 'none';
+        return;
+      }
+      
+      function updateProductSlider(animate = true) {
+        const params = calculateParams();
+        visibleCards = params.visibleCards;
+        maxScroll = params.maxScroll;
+        
+        if (maxScroll === 0) {
+          if (prevBtn) prevBtn.style.display = 'none';
+          if (nextBtn) nextBtn.style.display = 'none';
+          if (dotsContainer) dotsContainer.style.display = 'none';
+          return;
+        }
+        
+        currentPosition = Math.max(0, Math.min(currentPosition, maxScroll));
+        
+        const offset = -currentPosition * itemWidth;
+        track.style.transition = animate ? 'transform 0.5s ease' : 'none';
+        track.style.transform = `translateX(${offset}px)`;
+        
+        // Update buttons - always visible
+        if (prevBtn) {
+          prevBtn.style.display = 'flex';
+          prevBtn.style.opacity = '1';
+          prevBtn.style.pointerEvents = 'all';
+        }
+        if (nextBtn) {
+          nextBtn.style.display = 'flex';
+          nextBtn.style.opacity = '1';
+          nextBtn.style.pointerEvents = 'all';
+        }
+        
+        // Update dots
+        if (dotsContainer) {
+          const dots = dotsContainer.querySelectorAll('.flash-product-dot');
+          dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === currentPosition);
+          });
+        }
+      }
+      
+      function startAutoSlide() {
+        stopAutoSlide();
+        autoSlideInterval = setInterval(() => {
+          currentPosition = currentPosition + 1 > maxScroll ? 0 : currentPosition + 1;
+          updateProductSlider();
+        }, AUTO_SLIDE_DURATION);
+      }
+      
+      function stopAutoSlide() {
+        if (autoSlideInterval) {
+          clearInterval(autoSlideInterval);
+          autoSlideInterval = null;
+        }
+      }
+      
+      // Event listeners
+      if (prevBtn) {
+        prevBtn.onclick = () => {
+          stopAutoSlide();
+          currentPosition = currentPosition - 1 < 0 ? maxScroll : currentPosition - 1;
+          updateProductSlider();
+          startAutoSlide();
+        };
+      }
+      
+      if (nextBtn) {
+        nextBtn.onclick = () => {
+          stopAutoSlide();
+          currentPosition = currentPosition + 1 > maxScroll ? 0 : currentPosition + 1;
+          updateProductSlider();
+          startAutoSlide();
+        };
+      }
+      
+      if (dotsContainer) {
+        dotsContainer.onclick = (e) => {
+          if (e.target.classList.contains('flash-product-dot')) {
+            stopAutoSlide();
+            currentPosition = parseInt(e.target.dataset.page);
+            updateProductSlider();
+            startAutoSlide();
+          }
+        };
+      }
+      
+      // Pause on hover
+      sliderWrapper.addEventListener('mouseenter', stopAutoSlide);
+      sliderWrapper.addEventListener('mouseleave', startAutoSlide);
+      
+      // Initialize
+      updateProductSlider(false);
+      startAutoSlide();
+      
+      // Store instance
+      productSliders[flashIndex] = {
+        interval: autoSlideInterval,
+        stop: stopAutoSlide
+      };
+    }
+    
+    // Initialize all product sliders for active tabs
+    document.querySelectorAll('.flash-sale-content.active .flash-products-slider').forEach(slider => {
+      const flashIndex = slider.getAttribute('data-flash-index');
+      if (flashIndex) {
+        initializeProductSlider(flashIndex);
+      }
+    });
+
+    // Flash Sale Cart Buttons - Sử dụng event delegation
+    // Đảm bảo chỉ đăng ký 1 lần
+    if (!window.flashCartHandlerRegistered) {
+      window.flashCartHandlerRegistered = true;
+      
+      document.addEventListener('click', async function(e) {
+        const btn = e.target.closest('.flash-btn-cart');
+        if (!btn) return;
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const productId = btn.getAttribute('data-product-id');
+        console.log('⚡ Flash Sale - Thêm vào giỏ:', productId);
+        
+        // Kiểm tra đăng nhập
+        const userId = AuthHelper.getUserId();
+        if (!userId) {
+          alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+          window.location.href = '/login';
+          return;
+        }
+        
+        try {
+          // Gọi API thêm vào giỏ
+          const response = await fetch('/api/cart', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              san_pham_id: productId,
+              so_luong: 1,
+              userId: userId
+            })
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // Animation thành công
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i>';
+            btn.style.background = '#28a745';
+            btn.style.borderColor = '#28a745';
+            btn.style.color = '#fff';
+            
+            // Cập nhật badge giỏ hàng
+            if (typeof CartManager !== 'undefined' && CartManager.updateCartBadge) {
+              CartManager.updateCartBadge();
+            }
+            
+            setTimeout(() => {
+              btn.innerHTML = originalHTML;
+              btn.style.background = '';
+              btn.style.borderColor = '';
+              btn.style.color = '';
+            }, 1500);
+          } else {
+            alert(result.message || 'Không thể thêm vào giỏ hàng');
+          }
+        } catch (error) {
+          console.error('Lỗi thêm vào giỏ:', error);
+          alert('Đã xảy ra lỗi khi thêm vào giỏ hàng');
+        }
+      });
+    }
+
+    // Banner Slider Logic
+    const bannerTrack = document.getElementById('bannerTrack');
+    const bannerPrev = document.getElementById('bannerPrev');
+    const bannerNext = document.getElementById('bannerNext');
+    const bannerDotsContainer = document.getElementById('bannerDots');
+    const images = bannerTrack.querySelectorAll('img');
+    const totalImages = images.length;
+    let currentIndex = 0;
+
+    // Clear and create dots
+    bannerDotsContainer.innerHTML = '';
+    for (let i = 0; i < totalImages; i++) {
+      const dot = document.createElement('div');
+      dot.classList.add('banner-dot');
+      if (i === 0) dot.classList.add('active');
+      dot.setAttribute('data-index', i);
+      dot.addEventListener('click', function() {
+        goToSlide(parseInt(this.getAttribute('data-index')));
+      });
+      bannerDotsContainer.appendChild(dot);
+    }
+
+    function updateSlider() {
+      // Update track position
+      const offset = -currentIndex * 100;
+      bannerTrack.style.transform = `translateX(${offset}%)`;
+      
+      // Update dots
+      const allDots = bannerDotsContainer.querySelectorAll('.banner-dot');
+      allDots.forEach((dot, index) => {
+        if (index === currentIndex) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    }
+
+    function goToSlide(index) {
+      currentIndex = index;
+      updateSlider();
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % totalImages;
+      updateSlider();
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+      updateSlider();
+    }
+
+    bannerNext.addEventListener('click', nextSlide);
+    bannerPrev.addEventListener('click', prevSlide);
+
+    // Auto slide every 10 seconds
+    let autoSlideInterval = setInterval(nextSlide, 10000);
+
+    // Pause auto slide on hover
+    bannerTrack.addEventListener('mouseenter', function() {
+      clearInterval(autoSlideInterval);
+    });
+
+    // Resume auto slide on mouse leave
+    bannerTrack.addEventListener('mouseleave', function() {
+      autoSlideInterval = setInterval(nextSlide, 10000);
+    });
+
+    // Lấy tất cả các nút "XEM NHANH"
+    const viewButtons = document.querySelectorAll('.product-view-btn');
+    const modal = document.getElementById('quickviewModal');
+    const modalImage = document.getElementById('modalProductImage');
+    const modalName = document.getElementById('modalProductName');
+    const modalSKU = document.getElementById('modalProductSKU');
+    const modalPrice = document.getElementById('modalProductPrice');
+    const modalStock = document.getElementById('modalProductStock');
+    const closeBtn = document.querySelector('.product-modal-close');
+
+    // Xử lý click nút "XEM NHANH"
+    viewButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const productId = this.getAttribute('data-product-id');
+        const card = this.closest('.product-card');
+        const image = card.querySelector('.product-image-container img');
+        const name = card.querySelector('.product-name').textContent;
+        const sku = card.querySelector('.product-sku').textContent;
+        const price = card.querySelector('.product-price').textContent;
+        const status = card.querySelector('.product-status-badge').textContent.trim();
+        
+        // Hiển thị thông tin trong modal
+        modalImage.src = image.src;
+        modalImage.alt = image.alt;
+        modalName.textContent = name;
+        modalSKU.textContent = sku;
+        modalPrice.textContent = price;
+        modalStock.textContent = status;
+
+        // Hiển thị modal
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Đóng modal khi click nút close
+    closeBtn.addEventListener('click', function () {
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    });
+
+    // Đóng modal khi click bên ngoài
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Đóng modal bằng phím ESC
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.style.display === 'flex') {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Xử lý thêm vào giỏ hàng
+    const cartButtons = document.querySelectorAll('.product-cart-btn');
+    cartButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-product-id');
+        // Gọi API thêm vào giỏ hàng
+        console.log('Thêm sản phẩm vào giỏ:', productId);
+        
+        // Hiệu ứng thông báo
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-check me-2"></i> ĐÃ THÊM';
+        this.style.background = '#27ae60';
+        this.style.color = 'white';
+        
+        setTimeout(() => {
+          this.innerHTML = originalText;
+          this.style.background = '';
+          this.style.color = '';
+        }, 2000);
+      });
+    });
+
+    // Xử lý mua ngay
+    const buyButtons = document.querySelectorAll('.product-buy-btn');
+    buyButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-product-id');
+        // Chuyển đến trang thanh toán
+        console.log('Mua ngay sản phẩm:', productId);
+        window.location.href = `/checkout?product=${productId}`;
+      });
+    });
+  });
+</script>

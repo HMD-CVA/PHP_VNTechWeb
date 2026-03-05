@@ -1,0 +1,3215 @@
+<div class="main-content">
+    <div class="admin-dashboard">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <div class="title-icon">⚡</div>
+                    <div>
+                        <h1>QUẢN LÝ FLASH SALE</h1>
+                        <p>Theo dõi và quản lý các chương trình Flash Sale</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" id="addFlashSaleBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>Tạo Flash Sale</span>
+                    </button>
+                    <button class="btn-secondary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Làm mới</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalFlashSales">0</h3>
+                    <p>Tổng Flash Sale</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon available">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="activeFlashSales">0</h3>
+                    <p>Đang diễn ra</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon busy">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="upcomingFlashSales">0</h3>
+                    <p>Sắp diễn ra</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon premium">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalProducts">0</h3>
+                    <p>Tổng variants</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-filter-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm flash sale theo tên...">
+            </div>
+            <div class="filter-controls">
+                <select class="filter-select" id="statusFilter">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="sap_dien_ra">🟡 Sắp diễn ra</option>
+                    <option value="dang_dien_ra">🟢 Đang diễn ra</option>
+                    <option value="da_ket_thuc">⚫ Đã kết thúc</option>
+                    <option value="cho">🔵 Chờ</option>
+                </select>
+                <select class="filter-select" id="regionFilter">
+                    <option value="">Tất cả vùng</option>
+                    <option value="bac">🔵 Miền Bắc</option>
+                    <option value="trung">🟠 Miền Trung</option>
+                    <option value="nam">🟢 Miền Nam</option>
+                </select>
+                <button class="clear-filters" id="clearFilters">
+                    <i class="fas fa-times"></i>
+                    Xóa lọc
+                </button>
+            </div>
+        </div>
+
+        <!-- Flash Sale Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3><i class="fas fa-bolt"></i> Danh sách Flash Sale</h3>
+                <div class="table-actions">
+                    <div class="search-box-inline">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="tableSearchInput" placeholder="Tìm trong bảng...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%">STT</th>
+                            <th style="width: 20%">TÊN FLASH SALE</th>
+                            <th style="width: 10%">VÙNG</th>
+                            <th style="width: 15%">NGÀY BẮT ĐẦU</th>
+                            <th style="width: 15%">NGÀY KẾT THÚC</th>
+                            <th style="width: 12%">TRẠNG THÁI</th>
+                            <th style="width: 8%">VARIANTS</th>
+                            <th style="width: 15%">THAO TÁC</th>
+                        </tr>
+                    </thead>
+                    <tbody id="flashSaleTableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flash Sale Modal -->
+<div class="modal fade modal-premium" id="flashSaleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-bolt"></i>
+                    <span id="modalTitle">Tạo Flash Sale Mới</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="flashSaleForm" novalidate>
+                    <input type="hidden" id="flashSaleId">
+
+                    <div class="form-sections">
+                        <!-- Basic Information -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="fas fa-info-circle"></i>
+                                Thông tin cơ bản
+                            </h4>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="tenFlashSale" class="form-label">Tên Flash Sale *</label>
+                                    <input type="text" class="form-control" id="tenFlashSale" required
+                                        placeholder="VD: Flash Sale Tết 2025">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vungId" class="form-label">Vùng áp dụng *</label>
+                                    <select class="form-select" id="vungId" required>
+                                        {{#if regions}}
+                                            {{#unless (eq regions.length 1)}}
+                                                <option value="">-- Chọn vùng --</option>
+                                            {{/unless}}
+                                            {{#each regions}}
+                                                <option value="{{this.ma_vung}}" {{#if (eq ../regions.length 1)}}selected{{/if}}>{{this.ten_vung}}</option>
+                                            {{/each}}
+                                        {{else}}
+                                            <option value="">-- Không có vùng nào --</option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="moTa" class="form-label">Mô tả</label>
+                                <textarea class="form-control" id="moTa" rows="2" style="white-space: pre-line;" 
+                                    placeholder="Mô tả ngắn về chương trình flash sale..."></textarea>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label for="ngayBatDau" class="form-label">Ngày bắt đầu *</label>
+                                    <input type="datetime-local" class="form-control" id="ngayBatDau" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ngayKetThuc" class="form-label">Ngày kết thúc *</label>
+                                    <input type="datetime-local" class="form-control" id="ngayKetThuc" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="trangThai" class="form-label">Trạng thái *</label>
+                                <select class="form-select" id="trangThai" required>
+                                    <option value="cho">🔵 Chờ</option>
+                                    <option value="sap_dien_ra">🟡 Sắp diễn ra</option>
+                                    <option value="dang_dien_ra">🟢 Đang diễn ra</option>
+                                    <option value="da_ket_thuc">⚫ Đã kết thúc</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Product Selection -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="fas fa-box-open"></i>
+                                Thêm sản phẩm vào Flash Sale
+                            </h4>
+                            
+                            <!-- Product Search & Select -->
+                            <div class="form-group">
+                                <label class="form-label">Tìm kiếm sản phẩm</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                    <input type="text" id="productSearchInput" class="form-control" 
+                                           placeholder="Tìm kiếm sản phẩm theo tên, SKU...">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Chọn sản phẩm</label>
+                                <select id="productSelect" class="form-select" size="6">
+                                    <option value="">-- Chọn sản phẩm để xem variants --</option>
+                                </select>
+                            </div>
+
+                            <!-- Variants Table -->
+                            <div id="variantsSection" style="display: none; margin-top: 1.5rem;">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-layer-group"></i>
+                                        Chọn phiên bản sản phẩm
+                                    </h5>
+                                    <button type="button" class="btn btn-primary btn-sm" id="addSelectedVariants">
+                                        <i class="fas fa-plus-circle"></i>
+                                        Thêm variants đã chọn
+                                    </button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width: 50px;">
+                                                    <input type="checkbox" id="selectAllVariants" class="form-check-input">
+                                                </th>
+                                                <th>Tên + Phiên bản</th>
+                                                <th style="width: 140px;">Giá gốc</th>
+                                                <th style="width: 160px;">Giá Flash Sale</th>
+                                                <th style="width: 120px;">Giới hạn mua</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="variantsTableBody">
+                                            <!-- Variants will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Selected Products List -->
+                            <div style="margin-top: 1.5rem;">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    Danh sách đã chọn (<span id="selectedCount">0</span>)
+                                </h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width: 80px;">Hình ảnh</th>
+                                                <th>Sản phẩm + Phiên bản</th>
+                                                <th style="width: 140px;">Giá gốc</th>
+                                                <th style="width: 140px;">Giá Flash Sale</th>
+                                                <th style="width: 100px;">Giới hạn</th>
+                                                <th style="width: 80px;">Xóa</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="selectedProductsTable">
+                                            <tr class="empty-row">
+                                                <td colspan="6" class="text-center text-muted py-4">
+                                                    <i class="fas fa-inbox fa-2x mb-2" style="opacity: 0.3;"></i>
+                                                    <p>Chưa có sản phẩm nào được chọn</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i>
+                    Hủy
+                </button>
+                <button type="submit" form="flashSaleForm" class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    Lưu Flash Sale
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- View Products Modal -->
+<div class="modal fade modal-premium" id="viewProductsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-eye"></i>
+                    <span>Sản phẩm trong Flash Sale</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 60px;">STT</th>
+                                <th>Tên sản phẩm</th>
+                                <th style="width: 120px;">Màu sắc</th>
+                                <th style="width: 120px;">Dung lượng</th>
+                                <th style="width: 140px;">Giá gốc</th>
+                                <th style="width: 140px;">Giá Flash Sale</th>
+                                <th style="width: 100px;">Tồn kho</th>
+                                <th style="width: 100px;">Đã bán</th>
+                                <th style="width: 100px;">Giới hạn</th>
+                            </tr>
+                        </thead>
+                        <tbody id="viewProductsTableBody">
+                            <!-- Products will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i>
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* Modern CSS Reset and Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --primary: #667eea;
+        --primary-dark: #5a6fd8;
+        --secondary: #764ba2;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark: #1f2937;
+        --light: #f8fafc;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --border-radius: 12px;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background: var(--light);
+        color: var(--gray-800);
+        line-height: 1.6;
+    }
+
+    .main-content {
+        min-height: 100vh;
+        padding: 24px;
+        max-width: 100%;
+    }
+
+    /* Header Styles */
+    .dashboard-header {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 28px 32px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--gray-200);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .header-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .title-icon {
+        font-size: 2.75rem;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .header-title h1 {
+        margin: 0;
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: var(--gray-800);
+    }
+
+    .header-title p {
+        margin: 4px 0 0 0;
+        color: var(--gray-500);
+        font-size: 1rem;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    /* Button Styles */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--gray-700);
+        border: 2px solid var(--gray-300);
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+        background: var(--gray-100);
+        border-color: var(--gray-400);
+        transform: translateY(-1px);
+    }
+
+    /* Stats Overview */
+    .stats-overview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--gray-200);
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        box-shadow: var(--shadow);
+    }
+
+    .stat-icon.total {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        color: #f59e0b;
+    }
+
+    .stat-icon.available {
+        background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
+        color: #38a169;
+    }
+
+    .stat-icon.busy {
+        background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        color: #3b82f6;
+    }
+
+    .stat-icon.premium {
+        background: linear-gradient(135deg, #e9d8fd, #d6bcfa);
+        color: #805ad5;
+    }
+
+    .stat-info h3 {
+        margin: 0;
+        font-size: 2rem;
+        color: var(--gray-800);
+        font-weight: 700;
+    }
+
+    .stat-info p {
+        margin: 4px 0 0 0;
+        color: var(--gray-500);
+        font-weight: 500;
+    }
+
+    /* Search and Filter */
+    .search-filter-bar {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 24px;
+        margin-bottom: 24px;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: nowrap;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--gray-200);
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: var(--gray-100);
+        border-radius: 10px;
+        padding: 12px 20px;
+        flex: 0 1 auto;
+        width: 1550px;
+        border: 2px solid var(--gray-200);
+        transition: var(--transition);
+    }
+
+    .search-box:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-box i {
+        color: var(--gray-400);
+        margin-right: 12px;
+    }
+
+    .search-box input {
+        border: none;
+        background: none;
+        outline: none;
+        flex: 1;
+        padding: 4px 0;
+        font-size: 0.95rem;
+        color: var(--gray-800);
+    }
+
+    .search-btn {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border: none;
+        padding: 10px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-left: 12px;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .search-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .filter-controls {
+        display: flex;
+        gap: 12px;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        flex: 1;
+    }
+
+    .filter-select {
+        padding: 12px 20px;
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        background: white;
+        color: var(--gray-700);
+        min-width: 180px;
+        flex: 1;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .filter-select:focus {
+        border-color: var(--primary);
+        outline: none;
+    }
+
+    .clear-filters {
+        background: none;
+        border: 2px solid var(--gray-200);
+        color: var(--gray-600);
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        min-width: 140px;
+        justify-content: center;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .clear-filters:hover {
+        background: var(--gray-100);
+        border-color: var(--gray-300);
+    }
+
+    /* Table Styles */
+    .table-container {
+        background: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin-bottom: 5px;
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--gray-200);
+        background: var(--gray-50);
+    }
+
+    .table-header h3 {
+        margin: 0;
+        color: var(--gray-800);
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .table-header h2 {
+        margin: 0;
+        color: var(--gray-800);
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .table-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .table-info {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .total-count {
+        color: var(--gray-600);
+        font-size: 0.9rem;
+    }
+
+    .total-count strong {
+        color: var(--primary);
+        font-weight: 700;
+    }
+
+    .btn-export {
+        background: white;
+        color: var(--gray-700);
+        border: 2px solid var(--gray-300);
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: var(--transition);
+    }
+
+    .btn-export:hover {
+        background: var(--gray-100);
+        border-color: var(--gray-400);
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .products-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .products-table th {
+        background: var(--gray-50);
+        padding: 16px 12px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--gray-700);
+        border-bottom: 1px solid var(--gray-200);
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .products-table td {
+        padding: 16px 12px;
+        border-bottom: 1px solid var(--gray-200);
+        vertical-align: middle;
+    }
+
+    .products-table tbody tr {
+        transition: var(--transition);
+    }
+
+    .products-table tbody tr:hover {
+        background: var(--gray-50);
+    }
+
+    .products-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* ===== TABLE CONTAINER ===== */
+    .table-container {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--gray-200);
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .table-header h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--gray-800);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .table-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    /* ===== SEARCH BOX INLINE ===== */
+    .search-box-inline {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .search-box-inline i {
+        position: absolute;
+        left: 14px;
+        color: var(--gray-400);
+        font-size: 0.95rem;
+        pointer-events: none;
+    }
+
+    .search-box-inline input {
+        padding: 10px 16px 10px 42px;
+        border: 1.5px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        width: 280px;
+        transition: var(--transition);
+        background: white;
+    }
+
+    .search-box-inline input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-box-inline input::placeholder {
+        color: var(--gray-400);
+    }
+
+    /* ===== TABLE ===== */
+    .table-responsive {
+        overflow-x: auto;
+        margin: 20px 0;
+    }
+
+    .products-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+    .products-table thead {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+    }
+
+    .products-table th {
+        padding: 14px 16px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    .products-table tbody tr {
+        border-bottom: 1px solid var(--gray-200);
+        transition: var(--transition);
+    }
+
+    .products-table tbody tr:hover {
+        background: var(--gray-100);
+    }
+
+    .products-table td {
+        padding: 14px 16px;
+        color: var(--gray-700);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    /* Table Column Styles */
+    .col-image {
+        width: 80px;
+    }
+
+    .col-name {
+        min-width: 200px;
+    }
+
+    .col-sku {
+        width: 120px;
+    }
+
+    .col-price {
+        width: 120px;
+    }
+
+    .col-category,
+    .col-brand {
+        width: 120px;
+    }
+
+    .col-status {
+        width: 140px;
+    }
+
+    .col-actions {
+        width: 100px;
+    }
+
+    /* Table Content Styles */
+    .product-table-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--gray-100);
+    }
+
+    .product-table-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-name {
+        font-weight: 600;
+        color: var(--gray-800);
+        margin-bottom: 4px;
+    }
+
+    .price-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .current-price {
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 0.95rem;
+    }
+
+    .original-price {
+        font-size: 0.85rem;
+        color: var(--gray-400);
+        text-decoration: line-through;
+    }
+
+    .category-badge,
+    .brand-badge {
+        background: var(--gray-100);
+        color: var(--gray-700);
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-badge.active {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+    }
+
+    .status-badge.inactive {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+    }
+
+    /* Legacy badge support */
+    .badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .badge-success {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+    }
+
+    .badge-warning {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning);
+    }
+
+    .badge-info {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .badge-secondary {
+        background: rgba(107, 114, 128, 0.1);
+        color: var(--gray-600);
+    }
+
+    .featured-icon {
+        color: var(--warning);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+    }
+
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        color: white;
+        font-size: 0.9rem;
+    }
+
+    .btn-edit {
+        background: var(--primary);
+    }
+
+    .btn-edit:hover {
+        background: var(--primary-dark);
+        transform: scale(1.1);
+    }
+
+    .btn-toggle-status {
+        background: var(--warning);
+    }
+
+    .btn-toggle-status:hover {
+        background: #e58e0b;
+        transform: scale(1.1);
+    }
+
+    .btn-delete {
+        background: var(--danger);
+    }
+
+    .btn-delete:hover {
+        background: #dc2626;
+        transform: scale(1.1);
+    }
+
+    .btn-info {
+        background: #3b82f6;
+    }
+
+    .btn-info:hover {
+        background: #2563eb;
+        transform: scale(1.1);
+    }
+
+    .btn-warning {
+        background: var(--warning);
+    }
+
+    .btn-warning:hover {
+        background: #d97706;
+        transform: scale(1.1);
+    }
+
+    .btn-danger {
+        background: var(--danger);
+    }
+
+    .btn-danger:hover {
+        background: #dc2626;
+        transform: scale(1.1);
+    }
+
+    /* Table Footer */
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        border-top: 1px solid var(--gray-200);
+        background: var(--gray-50);
+    }
+
+    .table-pagination {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .pagination-btn {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--gray-300);
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        color: var(--gray-600);
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+        background: var(--gray-100);
+        border-color: var(--gray-400);
+    }
+
+    .pagination-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .pagination-info {
+        font-size: 0.9rem;
+        color: var(--gray-600);
+    }
+
+    /* Empty State */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 40px;
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--gray-200);
+        text-align: center;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.7;
+    }
+
+    .empty-content h3 {
+        margin: 0 0 8px 0;
+        color: var(--gray-800);
+        font-size: 1.5rem;
+    }
+
+    .empty-content p {
+        margin: 0 0 24px 0;
+        color: var(--gray-500);
+    }
+
+    /* Loading State */
+    .loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--gray-200);
+        border-left: 4px solid var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Modal Styles */
+    .modal-premium .modal-content {
+        border: none;
+        border-radius: 16px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    .modal-premium .modal-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border-bottom: none;
+        padding: 24px 28px;
+    }
+
+    .modal-premium .modal-title {
+        font-weight: 700;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .modal-premium .modal-body {
+        padding: 0;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .modal-premium .modal-footer {
+        border-top: 1px solid var(--gray-200);
+        padding: 5px 28px;
+        background: white;
+    }
+
+    /* Form Styles */
+    .form-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .form-section {
+        background: var(--gray-50);
+        border-radius: 12px;
+        padding: 0 20px;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+        color: var(--gray-700);
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .section-title i {
+        color: var(--primary);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--gray-700);
+        margin: 8px 0px 3px 0px;
+        font-size: 0.95rem;
+        display: block;
+    }
+
+    .form-control,
+    .form-select {
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background: white;
+        width: 100%;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+
+    /* Auto-resize textarea */
+    textarea.form-control {
+        overflow: hidden;
+        resize: none;
+        min-height: 50px;
+    }
+
+    .input-group {
+        display: flex;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .input-group .form-control {
+        border-radius: 8px 0 0 8px;
+    }
+
+    .input-group .input-group-text {
+        background: var(--gray-100);
+        border: 2px solid var(--gray-200);
+        border-left: none;
+        color: var(--gray-600);
+        padding: 12px;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .image-preview-container {
+        margin-top: 12px;
+    }
+
+    .image-preview {
+        border: 2px dashed var(--gray-300);
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+        color: var(--gray-500);
+        background: white;
+        transition: var(--transition);
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .image-preview.has-image {
+        border-color: var(--primary);
+        background: var(--gray-50);
+        padding: 20px;
+    }
+
+    .image-preview img {
+        max-width: 100%;
+        max-height: 160px;
+        border-radius: 8px;
+    }
+
+    .preview-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .preview-placeholder i {
+        font-size: 3rem;
+        color: var(--gray-300);
+    }
+
+    .checkbox-group {
+        margin-top: 8px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        color: var(--gray-700);
+    }
+
+    .checkbox-label input[type="checkbox"] {
+        display: none;
+    }
+
+    .checkmark {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--gray-300);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+    }
+
+    .checkbox-label input[type="checkbox"]:checked+.checkmark {
+        background: var(--primary);
+        border-color: var(--primary);
+    }
+
+    .checkbox-label input[type="checkbox"]:checked+.checkmark::after {
+        content: '✓';
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .products-table {
+            min-width: 1000px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .main-content {
+            padding: 16px;
+        }
+
+        .header-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .header-actions {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .search-filter-bar {
+            flex-direction: column;
+        }
+
+        .search-box {
+            min-width: auto;
+            width: 100%;
+        }
+
+        .filter-controls {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .filter-select {
+            flex: 1;
+            min-width: auto;
+        }
+
+        .table-header {
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .table-footer {
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .form-grid,
+        .form-grid-2,
+        .form-grid-3 {
+            grid-template-columns: 1fr;
+        }
+
+        .stats-overview {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-header {
+            padding: 20px;
+        }
+
+        .title-icon {
+            font-size: 2rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .header-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .modal-premium .modal-footer {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .modal-premium .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    /* Additional styles for management modals */
+    .management-modal .modal-content {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .management-modal .table-container {
+        margin-top: 20px;
+    }
+
+    .management-modal .form-section {
+        background: var(--gray-50);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .management-modal .section-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+        color: var(--gray-700);
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .modal-premium .modal-dialog {
+        max-height: 600px;
+        max-width: none;
+        margin: 1.75rem auto;
+    }
+
+    .modal-premium .modal-xl {
+        max-width: 1140px;
+    }
+
+    .modal-premium .modal-xxl {
+        max-width: 1400px;
+    }
+
+    .modal-premium .modal-lg {
+        max-width: 800px;
+    }
+
+    .modal-premium .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    @media (max-width: 1400px) {
+        .modal-premium .modal-xxl {
+            max-width: 95%;
+            margin: 1rem auto;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .modal-premium .modal-xl {
+            max-width: 95%;
+        }
+    }
+
+    .modal-premium .table-responsive {
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+    }
+
+    .modal-premium .products-table {
+        margin-bottom: 0;
+    }
+
+    .modal-premium .products-table th {
+        background: var(--gray-50);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    /* Table Utilities */
+    .text-center {
+        text-align: center;
+    }
+
+    .text-end {
+        text-align: right;
+    }
+
+    .fw-bold {
+        font-weight: 700;
+    }
+
+    .text-muted {
+        color: var(--gray-500);
+    }
+
+    /* ===== FLASH SALE MODAL & VIEW PRODUCTS MODAL ENHANCEMENTS ===== */
+    
+    /* Modal Body Padding */
+    .modal-premium .modal-body {
+        padding: 28px;
+    }
+
+    /* Form Sections in Modal */
+    .modal-premium .form-section {
+        background: var(--gray-50);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        border: 1px solid var(--gray-200);
+    }
+
+    .modal-premium .form-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .modal-premium .section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--gray-200);
+    }
+
+    .modal-premium .section-title i {
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
+
+    /* Product Search Input Group */
+    .modal-premium .input-group {
+        box-shadow: var(--shadow);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .modal-premium .input-group-text {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border: none;
+        padding: 12px 16px;
+    }
+
+    .modal-premium .input-group .form-control {
+        border: 2px solid var(--gray-200);
+        border-left: none;
+    }
+
+    /* Product Select Dropdown */
+    .modal-premium select[size] {
+        min-height: 180px;
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 8px;
+        background: white;
+    }
+
+    .modal-premium select[size]:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+
+    .modal-premium select[size] option {
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        cursor: pointer;
+    }
+
+    .modal-premium select[size] option:hover {
+        background: var(--gray-100);
+    }
+
+    /* Variants Section */
+    #variantsSection {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+    }
+
+    #variantsSection h5 {
+        color: var(--gray-800);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #variantsSection h5 i {
+        color: var(--primary);
+    }
+
+    /* Table Enhancements in Modals */
+    .modal-premium .table-responsive {
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .modal-premium .table {
+        margin-bottom: 0;
+    }
+
+    .modal-premium .table thead {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    }
+
+    .modal-premium .table thead th {
+        color: var(--gray-800);
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 14px 12px;
+        border-bottom: 2px solid var(--gray-300);
+        white-space: nowrap;
+    }
+
+    .modal-premium .table tbody td {
+        padding: 12px;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .modal-premium .table tbody tr:hover {
+        background: var(--gray-50);
+    }
+
+    .modal-premium .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Table Bordered Style */
+    .modal-premium .table-bordered {
+        border: 1px solid var(--gray-200);
+    }
+
+    .modal-premium .table-bordered th,
+    .modal-premium .table-bordered td {
+        border: 1px solid var(--gray-200);
+    }
+
+    /* Empty Row Styling */
+    .modal-premium .empty-row td {
+        background: var(--gray-50);
+        color: var(--gray-500);
+        padding: 40px 20px !important;
+    }
+
+    .modal-premium .empty-row i {
+        display: block;
+        font-size: 3rem;
+        margin-bottom: 12px;
+        color: var(--gray-300);
+    }
+
+    .modal-premium .empty-row p {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    /* Selected Products List */
+    #selectedProductsTable tbody tr:not(.empty-row) {
+        background: white;
+    }
+
+    #selectedProductsTable tbody tr:not(.empty-row):hover {
+        background: rgba(102, 126, 234, 0.05);
+    }
+
+    /* Button Styling in Modal */
+    .modal-premium .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        box-shadow: var(--shadow);
+    }
+
+    .modal-premium .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .modal-premium .btn-secondary {
+        background: white;
+        border: 2px solid var(--gray-300);
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: var(--gray-700);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+    }
+
+    .modal-premium .btn-secondary:hover {
+        background: var(--gray-100);
+        border-color: var(--gray-400);
+        transform: translateY(-1px);
+    }
+
+    .modal-premium .btn-sm {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+    }
+
+    /* Checkbox Styling in Tables */
+    .modal-premium .form-check-input {
+        width: 18px;
+        height: 18px;
+        border: 2px solid var(--gray-300);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .modal-premium .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+    .modal-premium .form-check-input:focus {
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        outline: none;
+    }
+
+    /* Selected Count Badge */
+    #selectedCount {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    /* Price Input Styling */
+    .modal-premium input[type="number"],
+    .modal-premium input[type="text"].price-input {
+        text-align: right;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    /* Flash Sale Specific Icons */
+    .modal-premium .fa-bolt {
+        color: #f59e0b;
+    }
+
+    .modal-premium .fa-box-open {
+        color: var(--primary);
+    }
+
+    .modal-premium .fa-check-circle {
+        color: var(--success);
+    }
+
+    .modal-premium .fa-eye {
+        color: #3b82f6;
+    }
+
+    /* Action Buttons in Tables */
+    .modal-premium .btn-danger {
+        background: var(--danger);
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        transition: var(--transition);
+    }
+
+    .modal-premium .btn-danger:hover {
+        background: #dc2626;
+        transform: scale(1.05);
+    }
+
+    /* Variants Table Specific */
+    #variantsTableBody input[type="number"] {
+        border: 2px solid var(--gray-200);
+        border-radius: 6px;
+        padding: 8px;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+
+    #variantsTableBody input[type="number"]:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+
+    /* Price Display Formatting */
+    .modal-premium .price-display {
+        font-weight: 600;
+        color: var(--gray-800);
+    }
+
+    .modal-premium .price-flash {
+        font-weight: 700;
+        color: var(--danger);
+        font-size: 1.05rem;
+    }
+
+    /* Modal Footer Enhancement */
+    .modal-premium .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 20px 28px;
+        background: var(--gray-50);
+        border-top: 1px solid var(--gray-200);
+    }
+
+    /* Table Header Actions */
+    .modal-premium .d-flex.justify-content-between {
+        margin-bottom: 16px;
+    }
+
+    .modal-premium .mb-3 h5 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--gray-800);
+    }
+
+    /* Table Light Background */
+    .modal-premium .table-light {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+    }
+
+    /* Bootstrap Utility Classes */
+    .modal-premium .mb-3 {
+        margin-bottom: 1rem;
+    }
+
+    .modal-premium .mb-0 {
+        margin-bottom: 0;
+    }
+
+    .modal-premium .py-4 {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .modal-premium .fa-2x {
+        font-size: 2em;
+    }
+
+    /* Responsive Modal Adjustments */
+    @media (max-width: 992px) {
+        .modal-premium .modal-xl {
+            max-width: 95%;
+        }
+
+        .modal-premium .form-grid-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .modal-premium .modal-body {
+            padding: 20px;
+        }
+
+        .modal-premium .form-section {
+            padding: 16px;
+        }
+
+        .modal-premium .table-responsive {
+            font-size: 0.85rem;
+        }
+
+        .modal-premium .modal-footer {
+            flex-direction: column;
+        }
+
+        .modal-premium .modal-footer .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+        .filter-select {
+            width: 100%;
+        }
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+/**
+ * ==========================================
+ * FLASH SALE MANAGEMENT SYSTEM
+ * Quản lý Flash Sale - Tối ưu và sạch sẽ
+ * ==========================================
+ */
+
+document.addEventListener('DOMContentLoaded', function() {
+    'use strict';
+
+    // ==========================================
+    // GLOBAL STATE
+    // ==========================================
+    let flashSalesData = [];
+    let filteredFlashSales = [];
+    let currentProductVariants = [];
+    let tempProductList = [];
+    let currentFlashSaleId = null;
+    let currentProduct = null;
+
+    // ==========================================
+    // DOM ELEMENTS
+    // ==========================================
+    const modal = new bootstrap.Modal(document.getElementById('flashSaleModal'));
+    const viewModal = new bootstrap.Modal(document.getElementById('viewProductsModal'));
+    const form = document.getElementById('flashSaleForm');
+    const addFlashSaleBtn = document.getElementById('addFlashSaleBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const regionFilter = document.getElementById('regionFilter');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    
+    const productSearchInput = document.getElementById('productSearchInput');
+    const productSelect = document.getElementById('productSelect');
+    const variantsSection = document.getElementById('variantsSection');
+    const variantsTableBody = document.getElementById('variantsTableBody');
+    const selectAllVariants = document.getElementById('selectAllVariants');
+    const addSelectedVariants = document.getElementById('addSelectedVariants');
+    const moTaTextarea = document.getElementById('moTa');
+    const vungIdSelect = document.getElementById('vungId');
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    init();
+
+    function init() {
+        // Auto-disable region select if only 1 option
+        if (vungIdSelect && vungIdSelect.options.length === 1) {
+            vungIdSelect.disabled = true;
+        }
+        
+        loadFlashSalesData();
+        loadProducts();
+        attachEventListeners();
+        setupAutoResizeTextarea();
+    }
+
+    // ==========================================
+    // AUTO RESIZE TEXTAREA
+    // ==========================================
+    function setupAutoResizeTextarea() {
+        if (!moTaTextarea) return;
+        
+        // Function to auto-resize based on content
+        function autoResize() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        }
+        
+        // Function to auto-resize based on newline count
+        function autoResizeByContent(textarea) {
+            const content = textarea.value || '';
+            const lineCount = (content.match(/\n/g) || []).length + 1; // +1 for the first line
+            const lineHeight = 24; // Approximate line height in pixels
+            const padding = 24; // Top and bottom padding
+            const minHeight = 50; // Minimum height
+            
+            const calculatedHeight = Math.max(minHeight, (lineCount * lineHeight) + padding);
+            textarea.style.height = calculatedHeight + 'px';
+        }
+        
+        // Listen to input event
+        moTaTextarea.addEventListener('input', autoResize);
+        
+        // Also resize on paste
+        moTaTextarea.addEventListener('paste', function() {
+            setTimeout(autoResize.bind(this), 0);
+        });
+        
+        // Initial resize
+        autoResize.call(moTaTextarea);
+    }
+
+    // ==========================================
+    // EVENT LISTENERS SETUP
+    // ==========================================
+    function attachEventListeners() {
+        // Main actions
+        addFlashSaleBtn?.addEventListener('click', () => openFlashSaleModal());
+        refreshBtn?.addEventListener('click', handleRefresh);
+        
+        // Search and filters
+        searchInput?.addEventListener('input', filterFlashSales);
+        statusFilter?.addEventListener('change', filterFlashSales);
+        regionFilter?.addEventListener('change', filterFlashSales);
+        clearFiltersBtn?.addEventListener('click', handleClearFilters);
+
+        // Product search and selection
+        productSearchInput?.addEventListener('input', handleProductSearch);
+        productSelect?.addEventListener('change', handleProductSelect);
+        selectAllVariants?.addEventListener('change', handleSelectAllVariants);
+        addSelectedVariants?.addEventListener('click', addVariantsToList);
+
+        // Vùng selection - reload products khi thay đổi vùng (học từ voucher)
+        vungIdSelect?.addEventListener('change', () => {
+            console.log('🔄 Region changed, reloading products...');
+            // Clear current selections
+            productSelect.innerHTML = '<option value="">-- Chọn sản phẩm để xem variants --</option>';
+            variantsSection.style.display = 'none';
+            currentProduct = null;
+            currentProductVariants = [];
+            // Reload products for new region
+            loadProducts();
+        });
+
+        // Form submission
+        form?.addEventListener('submit', saveFlashSale);
+    }
+
+    // ==========================================
+    // EVENT HANDLERS
+    // ==========================================
+    function handleRefresh() {
+        refreshBtn.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i><span>Đang tải...</span>';
+        loadFlashSalesData().finally(() => {
+            refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i><span>Làm mới</span>';
+        });
+    }
+
+    function handleClearFilters() {
+        if (searchInput) searchInput.value = '';
+        if (statusFilter) statusFilter.value = '';
+        if (regionFilter) regionFilter.value = '';
+        filterFlashSales();
+    }
+
+    function handleProductSearch(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const options = productSelect.options;
+        
+        for (let i = 1; i < options.length; i++) {
+            const text = options[i].textContent.toLowerCase();
+            options[i].style.display = text.includes(searchTerm) ? '' : 'none';
+        }
+    }
+
+    async function handleProductSelect(e) {
+        const productId = e.target.value;
+        
+        if (!productId) {
+            variantsSection.style.display = 'none';
+            return;
+        }
+        
+        try {
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const productData = JSON.parse(selectedOption.dataset.product || '{}');
+            
+            console.log('🔍 Selected product:', {
+                id: productId,
+                name: productData.ten_san_pham,
+                data: productData
+            });
+            
+            await loadProductVariants(productData);
+        } catch (error) {
+            console.error('❌ Error handling product select:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể load thông tin sản phẩm'
+            });
+        }
+    }
+
+    function handleSelectAllVariants(e) {
+        const checkboxes = variantsTableBody.querySelectorAll('.variant-checkbox');
+        checkboxes.forEach(cb => cb.checked = e.target.checked);
+    }
+
+    // ==========================================
+    // DATA LOADING FUNCTIONS
+    // ==========================================
+    async function loadFlashSalesData() {
+        try {
+            const response = await fetch('/api/flash-sales');
+            if (!response.ok) throw new Error('Failed to load flash sales');
+            
+            flashSalesData = await response.json();
+            filteredFlashSales = [...flashSalesData];
+            
+            renderFlashSalesTable();
+            updateStatistics();
+        } catch (error) {
+            console.error('Error loading flash sales:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể tải dữ liệu flash sales'
+            });
+        }
+    }
+
+    async function loadProducts() {
+        try {
+            // Lấy vùng của flash sale (học từ voucher)
+            const vungId = document.getElementById('vungId')?.value;
+            
+            if (!vungId) {
+                console.warn('⚠️ Flash sale region not selected');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cảnh báo',
+                    text: 'Vui lòng chọn vùng cho flash sale trước'
+                });
+                return;
+            }
+            
+            console.log('🔄 Loading products for region:', vungId);
+            
+            // Gọi API với filter theo vùng (học từ voucher)
+            const response = await fetch(`/api/sanpham?vung_id=${vungId}`);
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('❌ API Error:', response.status, errorText);
+                throw new Error(`API returned ${response.status}: ${errorText}`);
+            }
+            
+            const data = await response.json();
+            console.log('📥 API Response:', data);
+            
+            // Parse products array (học từ voucher)
+            let products = [];
+            if (data.success && data.data?.sanphams) {
+                products = data.data.sanphams;
+            } else if (data.sanphams) {
+                products = data.sanphams;
+            } else if (Array.isArray(data)) {
+                products = data;
+            } else {
+                throw new Error('Invalid API response format');
+            }
+            
+            if (!Array.isArray(products)) {
+                throw new Error('Products is not an array');
+            }
+            
+            // Filter products: chỉ lấy products có variants cho vùng này (học từ voucher)
+            const filteredProducts = products.filter(product => {
+                const variants = product.variants || [];
+                return variants.some(v => v.site_origin === vungId);
+            });
+            
+            console.log('🌍 Flash sale region:', vungId);
+            console.log('📦 Total products:', products.length);
+            console.log('✅ Products with variants in region:', filteredProducts.length);
+            
+            productSelect.innerHTML = '<option value="">-- Chọn sản phẩm để xem variants --</option>';
+            
+            if (filteredProducts.length === 0) {
+                productSelect.innerHTML = '<option value="">Không có sản phẩm nào cho vùng này</option>';
+                return;
+            }
+            
+            filteredProducts.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.textContent = `${product.ten_san_pham} (${product.ma_san_pham})`;
+                option.dataset.product = JSON.stringify(product);
+                productSelect.appendChild(option);
+            });
+            
+        } catch (error) {
+            console.error('Error loading products:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể tải danh sách sản phẩm'
+            });
+        }
+    }
+
+    async function loadProductVariants(product) {
+        try {
+            currentProduct = product;
+            
+            // Lấy vùng đã chọn từ form
+            const vungId = document.getElementById('vungId').value;
+            
+            if (!vungId) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cảnh báo',
+                    text: 'Vui lòng chọn vùng trước khi chọn sản phẩm'
+                });
+                variantsSection.style.display = 'none';
+                return;
+            }
+            
+            // Load variants từ API sanpham (giống như voucher)
+            console.log(`🔍 Loading variants for product ${product.id} in region ${vungId}`);
+            const response = await fetch(`/api/sanpham/${product.id}/variants`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch product variants');
+            }
+            
+            const data = await response.json();
+            let variants = Array.isArray(data) ? data : (data.data || data.variants || []);
+            
+            // Filter variants theo vùng
+            variants = variants.filter(v => v.site_origin === vungId);
+            
+            console.log('📦 Product Variants theo vùng:', {
+                vungId: vungId,
+                productId: product.id,
+                productName: product.ten_san_pham,
+                totalVariants: Array.isArray(data) ? data.length : (data.data || data.variants || []).length,
+                variantsInRegion: variants.length,
+                firstVariant: variants[0]
+            });
+            
+            if (variants.length === 0) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Thông báo',
+                    text: `Sản phẩm "${product.ten_san_pham}" không có variants trong vùng "${vungId}"`
+                });
+                variantsSection.style.display = 'none';
+                return;
+            }
+
+            // Map variants từ SQL - đảm bảo tất cả field được set
+            currentProductVariants = variants.map((v, index) => {
+                const mappedVariant = {
+                    index: index,
+                    variantId: v.id || v.variant_id,  // UUID từ product_variants.id
+                    productId: product.id,
+                    productName: product.ten_san_pham,
+                    ma_sku: v.ma_sku || 'N/A',
+                    ten_hien_thi: v.ten_hien_thi || `Variant ${index + 1}`,
+                    variantName: v.ten_hien_thi || `Variant ${index + 1}`,
+                    gia_niem_yet: v.gia_niem_yet || 0,
+                    price: v.gia_ban || 0,
+                    stock: v.so_luong_ton_kho || 0,
+                    site_origin: v.site_origin || '',
+                    link_avatar: v.anh_dai_dien || product.anh_dai_dien || '/image/default-product.png',
+                    trang_thai: v.trang_thai
+                };
+                
+                console.log(`Variant ${index}:`, mappedVariant);
+                return mappedVariant;
+            });
+
+            console.log('✅ Đã map', currentProductVariants.length, 'variants thuộc vùng', vungId);
+            renderVariantsTable();
+            variantsSection.style.display = 'block';
+            
+        } catch (error) {
+            console.error('❌ Error loading product variants:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể tải variant của sản phẩm: ' + error.message
+            });
+            variantsSection.style.display = 'none';
+        }
+    }
+
+    function renderVariantsTable() {
+        if (currentProductVariants.length === 0) {
+            variantsTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Không có variant</td></tr>';
+            return;
+        }
+
+        variantsTableBody.innerHTML = currentProductVariants.map((variant) => {
+            const fullName = variant.ten_hien_thi;
+            const formattedPrice = new Intl.NumberFormat('vi-VN').format(variant.price || 0);
+            
+            let siteOriginBadge = '';
+            if (variant.site_origin) {
+                const badgeClass = variant.site_origin === 'bac' ? 'primary' : variant.site_origin === 'trung' ? 'warning' : 'success';
+                siteOriginBadge = `<span class="badge badge-${badgeClass}">${variant.site_origin.toUpperCase()}</span>`;
+            }
+            
+            const existingItem = tempProductList.find(p => p.variantId === variant.variantId);
+            const isChecked = existingItem ? 'checked' : '';
+            const flashPrice = existingItem ? existingItem.gia_flash_sale : Math.round(variant.price * 0.9);
+            const limitQty = existingItem ? existingItem.gioi_han_mua : 1;
+            
+            return `
+                <tr>
+                    <td class="text-center">
+                        <input type="checkbox" class="form-check-input variant-checkbox" 
+                               data-index="${variant.index}" ${isChecked}>
+                    </td>
+                    <td>
+                        <div><strong>${escapeHtml(fullName)}</strong></div>
+                        <small class="text-muted">
+                            ${variant.ma_sku ? `SKU: ${escapeHtml(variant.ma_sku)}` : ''} 
+                            ${siteOriginBadge}
+                        </small>
+                        <div><small>Tồn kho: ${variant.stock || 0}</small></div>
+                    </td>
+                    <td class="text-end fw-bold">${formattedPrice}₫</td>
+                    <td>
+                        <input type="number" 
+                               class="form-control form-control-sm flash-price-input" 
+                               data-index="${variant.index}"
+                               min="0" 
+                               max="${variant.price || 0}"
+                               value="${flashPrice}"
+                               placeholder="Nhập giá">
+                    </td>
+                    <td>
+                        <input type="number" 
+                               class="form-control form-control-sm limit-qty-input" 
+                               data-index="${variant.index}"
+                               min="1" 
+                               max="${variant.stock || 999}"
+                               value="${limitQty}">
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // ==========================================
+    // FILTER & SEARCH FUNCTIONS
+    // ==========================================
+    function filterFlashSales() {
+        const searchTerm = searchInput?.value.toLowerCase() || '';
+        const statusValue = statusFilter?.value || '';
+        const regionValue = regionFilter?.value || '';
+
+        filteredFlashSales = flashSalesData.filter(fs => {
+            const matchesSearch = fs.ten_flash_sale.toLowerCase().includes(searchTerm);
+            const matchesStatus = !statusValue || fs.trang_thai === statusValue;
+            const matchesRegion = !regionValue || fs.vung_id === regionValue;
+            return matchesSearch && matchesStatus && matchesRegion;
+        });
+
+        renderFlashSalesTable();
+        updateDisplayCount();
+    }
+
+    function updateDisplayCount() {
+        const countElement = document.getElementById('displayCount');
+        if (countElement) {
+            countElement.textContent = filteredFlashSales.length || flashSalesData.length;
+        }
+    }
+
+    function updateStatistics() {
+        const total = flashSalesData.length;
+        const active = flashSalesData.filter(fs => fs.trang_thai === 'dang_dien_ra').length;
+        const upcoming = flashSalesData.filter(fs => fs.trang_thai === 'cho').length;
+        const totalProducts = flashSalesData.reduce((sum, fs) => sum + (fs.product_count || 0), 0);
+
+        document.getElementById('totalFlashSales').textContent = total;
+        document.getElementById('activeFlashSales').textContent = active;
+        document.getElementById('upcomingFlashSales').textContent = upcoming;
+        document.getElementById('totalProducts').textContent = totalProducts;
+    }
+
+    function renderFlashSalesTable() {
+        const tbody = document.getElementById('flashSaleTableBody');
+        const dataToRender = filteredFlashSales.length > 0 ? filteredFlashSales : flashSalesData;
+        
+        if (!dataToRender || dataToRender.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center py-5">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3" style="display: block; opacity: 0.3;"></i>
+                        <p class="text-muted">Chưa có flash sale nào</p>
+                    </td>
+                </tr>`;
+            updateDisplayCount();
+            return;
+        }
+
+        tbody.innerHTML = dataToRender.map((fs, index) => {
+            const statusClass = getStatusClass(fs.trang_thai);
+            const statusIcon = getStatusIcon(fs.trang_thai);
+            const regionBadge = getRegionBadge(fs.vung_id);
+            
+            return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="text-align: left; font-weight: 600;">${escapeHtml(fs.ten_flash_sale)}</td>
+                    <td>${regionBadge}</td>
+                    <td>${formatDateTime(fs.ngay_bat_dau)}</td>
+                    <td>${formatDateTime(fs.ngay_ket_thuc)}</td>
+                    <td>
+                        <span class="badge badge-${statusClass}">
+                            <i class="${statusIcon}"></i>
+                            ${getStatusText(fs.trang_thai)}
+                        </span>
+                    </td>
+                    <td><strong>${fs.variant_count || 0}</strong></td>
+                    <td>
+                        <div class="action-buttons" style="gap: 0.375rem;">
+                            <button class="btn btn-action btn-info" data-action="view" data-id="${fs.id}" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-action btn-warning" data-action="edit" data-id="${fs.id}" title="Chỉnh sửa">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-action btn-danger" data-action="delete" data-id="${fs.id}" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        tbody.querySelectorAll('[data-action]').forEach(btn => {
+            btn.addEventListener('click', handleAction);
+        });
+        
+        updateDisplayCount();
+    }
+
+    function handleAction(e) {
+        const action = e.currentTarget.dataset.action;
+        const id = e.currentTarget.dataset.id;
+
+        switch(action) {
+            case 'view':
+                viewFlashSaleProducts(id);
+                break;
+            case 'edit':
+                openFlashSaleModal(id);
+                break;
+            case 'delete':
+                deleteFlashSale(id);
+                break;
+        }
+    }
+
+    // ==========================================
+    // MODAL FUNCTIONS
+    // ==========================================
+    async function openFlashSaleModal(id = null) {
+        currentFlashSaleId = id;
+        tempProductList = [];
+        currentProductVariants = [];
+        currentProduct = null;
+
+        form.reset();
+        document.getElementById('selectedProductsTable').innerHTML = `
+            <tr class="empty-row">
+                <td colspan="6" class="text-center text-muted py-4">
+                    <i class="fas fa-inbox fa-2x mb-2" style="opacity: 0.3;"></i>
+                    <p>Chưa có variant nào được chọn</p>
+                </td>
+            </tr>`;
+        
+        if (moTaTextarea) moTaTextarea.style.height = 'auto';
+        if (productSearchInput) productSearchInput.value = '';
+        if (productSelect) productSelect.value = '';
+        if (productSelect) Array.from(productSelect.options).forEach(opt => opt.style.display = '');
+        if (variantsSection) variantsSection.style.display = 'none';
+        if (variantsTableBody) variantsTableBody.innerHTML = '';
+        if (selectAllVariants) selectAllVariants.checked = false;
+        updateSelectedCount();
+
+        if (id) {
+            document.getElementById('modalTitle').textContent = 'Chỉnh sửa Flash Sale';
+            await loadFlashSaleData(id);
+        } else {
+            document.getElementById('modalTitle').textContent = 'Tạo Flash Sale Mới';
+            const flashSaleIdInput = document.getElementById('flashSaleId');
+            if (flashSaleIdInput) flashSaleIdInput.value = '';
+        }
+
+        modal.show();
+    }
+
+    async function loadFlashSaleData(id) {
+        try {
+            const response = await fetch(`/api/flash-sales/${id}`);
+            if (!response.ok) throw new Error('Failed to load flash sale');
+            
+            const data = await response.json();
+            const flashSale = data.data || data;
+
+            document.getElementById('flashSaleId').value = flashSale.id;
+            document.getElementById('tenFlashSale').value = flashSale.ten_flash_sale;
+            document.getElementById('moTa').value = flashSale.mo_ta || '';
+            document.getElementById('ngayBatDau').value = formatDateTimeLocal(flashSale.ngay_bat_dau);
+            document.getElementById('ngayKetThuc').value = formatDateTimeLocal(flashSale.ngay_ket_thuc);
+            document.getElementById('vungId').value = flashSale.vung_id || '';
+            document.getElementById('trangThai').value = flashSale.trang_thai;
+            
+            // Auto-resize textarea after loading data based on newline count
+            if (moTaTextarea) {
+                const content = moTaTextarea.value || '';
+                const lineCount = (content.match(/\n/g) || []).length + 1;
+                const lineHeight = 24;
+                const padding = 24;
+                const minHeight = 50;
+                const calculatedHeight = Math.max(minHeight, (lineCount * lineHeight) + padding);
+                
+                moTaTextarea.style.height = 'auto';
+                moTaTextarea.style.height = Math.max(calculatedHeight, moTaTextarea.scrollHeight) + 'px';
+            }
+
+            const itemsResponse = await fetch(`/api/flash-sales/${id}/items`);
+            if (itemsResponse.ok) {
+                const items = await itemsResponse.json();
+                
+                console.log('📦 Loaded flash sale items:', items.length, items);
+                
+                tempProductList = items.map(item => ({
+                    id: item.id, // ID của flash_sale_item - QUAN TRỌNG cho UPDATE
+                    variantId: item.variant_id,
+                    productId: item.san_pham_id,
+                    productName: item.ten_san_pham,
+                    variantName: item.variant_name || item.ten_hien_thi,
+                    ma_sku: item.ma_sku || '',
+                    fullName: item.ten_hien_thi || '',
+                    gia_goc: item.gia_goc,
+                    gia_flash_sale: item.gia_flash_sale,
+                    gioi_han_mua: item.gioi_han_mua,
+                    so_luong_ton: item.so_luong_ton,
+                    da_ban: item.da_ban || 0,
+                    thu_tu: item.thu_tu,
+                    trang_thai: item.trang_thai,
+                    site_origin: item.site_origin || '',
+                    link_avatar: item.link_avatar || item.anh_dai_dien || '/image/default-product.png'
+                }));
+                
+                console.log('✅ Mapped tempProductList:', tempProductList.length, tempProductList);
+                renderTempProductList();
+                updateSelectedCount();
+            }
+        } catch (error) {
+            console.error('Error loading flash sale data:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Không thể tải thông tin flash sale'
+            });
+        }
+    }
+
+    // ==========================================
+    // ADD VARIANTS TO LIST
+    // ==========================================
+    function addVariantsToList() {
+        const checkedBoxes = variantsTableBody.querySelectorAll('.variant-checkbox:checked');
+        
+        if (checkedBoxes.length === 0) {
+            Swal.fire('Thông báo', 'Vui lòng chọn ít nhất 1 variant', 'info');
+            return;
+        }
+
+        let addedCount = 0;
+        let updatedCount = 0;
+        let errors = [];
+
+        checkedBoxes.forEach(checkbox => {
+            const index = parseInt(checkbox.dataset.index);
+            const variant = currentProductVariants.find(v => v.index === index);
+            
+            if (!variant) {
+                console.error(`Variant not found for index ${index}`);
+                return;
+            }
+
+            const flashPriceInput = variantsTableBody.querySelector(`.flash-price-input[data-index="${index}"]`);
+            const limitQtyInput = variantsTableBody.querySelector(`.limit-qty-input[data-index="${index}"]`);
+            
+            const flashPrice = parseFloat(flashPriceInput?.value || 0);
+            const limitQty = parseInt(limitQtyInput?.value || 1);
+            
+            const variantDisplayName = variant.ten_hien_thi || variant.variantName || 'N/A';
+
+            // Validation
+            if (!flashPrice || flashPrice <= 0) {
+                errors.push(`${variantDisplayName}: Chưa nhập giá flash sale`);
+                return;
+            }
+
+            if (flashPrice >= (variant.price || 0)) {
+                errors.push(`${variantDisplayName}: Giá flash sale phải nhỏ hơn giá gốc`);
+                return;
+            }
+
+            // Check if already exists in tempProductList
+            const existingIndex = tempProductList.findIndex(p => p.variantId === variant.variantId);
+
+            const itemData = {
+                variantId: variant.variantId || '',  // UUID từ product_variants.id
+                productId: variant.productId || '',
+                productName: variant.productName || '',
+                variantName: variantDisplayName,
+                ma_sku: variant.ma_sku || '',
+                site_origin: variant.site_origin || '',
+                fullName: `${variant.productName || ''} - ${variantDisplayName}`,
+                gia_goc: variant.price || 0,
+                gia_flash_sale: flashPrice,
+                gioi_han_mua: limitQty,
+                so_luong_ton: variant.stock || 0,
+                thu_tu: existingIndex !== -1 ? tempProductList[existingIndex].thu_tu : (tempProductList.length + 1),
+                trang_thai: 'dang_ban',
+                link_avatar: variant.link_avatar || '/image/default-product.png'
+            };
+            
+            console.log(`Adding variant to temp list:`, itemData);
+
+            if (existingIndex !== -1) {
+                // Update existing item
+                tempProductList[existingIndex] = itemData;
+                updatedCount++;
+            } else {
+                // Add new item
+                tempProductList.push(itemData);
+                addedCount++;
+            }
+        });
+
+        if (errors.length > 0) {
+            Swal.fire('Lỗi', errors.join('<br>'), 'error');
+        }
+
+        if (addedCount > 0 || updatedCount > 0) {
+            renderTempProductList();
+            updateSelectedCount();
+            
+            // Reset
+            variantsSection.style.display = 'none';
+            productSearchInput.value = '';
+            productSelect.value = '';
+            selectAllVariants.checked = false;
+            
+            const message = [];
+            if (addedCount > 0) message.push(`Đã thêm ${addedCount} variant`);
+            if (updatedCount > 0) message.push(`Đã cập nhật ${updatedCount} variant`);
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: message.join(', '),
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+    }
+
+    // Render temp product list
+    function renderTempProductList() {
+        const tbody = document.getElementById('selectedProductsTable');
+        
+        if (tempProductList.length === 0) {
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="6" class="text-center"><i class="fas fa-inbox fa-3x text-muted mb-3" style="display: block; opacity: 0.3;"></i><p class="text-muted">Chưa có variant nào được chọn</p></td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = tempProductList.map((product, index) => {
+            const formattedOriginal = new Intl.NumberFormat('vi-VN').format(product.gia_goc || 0);
+            const formattedFlash = new Intl.NumberFormat('vi-VN').format(product.gia_flash_sale || 0);
+            const discount = product.gia_goc > 0 ? Math.round(((product.gia_goc - product.gia_flash_sale) / product.gia_goc) * 100) : 0;
+            const imageUrl = product.link_avatar || '/image/default-product.png';
+            const skuText = product.ma_sku ? `SKU: ${product.ma_sku}` : '';
+            const stockText = product.so_luong_ton !== undefined ? `Tồn: ${product.so_luong_ton}` : '';
+            const discountText = discount > 0 ? `Giảm ${discount}%` : '';
+            
+            return `
+                <tr>
+                    <td style="text-align: center;">
+                        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.productName || '')}" 
+                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--gray-200);">
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>${escapeHtml(product.fullName || product.variantName || 'N/A')}</strong>
+                        <br><small class="text-muted">
+                            ${[skuText, stockText, discountText].filter(t => t).join(' | ')}
+                        </small>
+                    </td>
+                    <td style="text-align: right;">${formattedOriginal}₫</td>
+                    <td style="text-align: right; color: var(--danger); font-weight: 700;">${formattedFlash}₫</td>
+                    <td style="text-align: center;"><strong>${product.gioi_han_mua || 1}</strong></td>
+                    <td style="text-align: center;">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFromTempList(${index})" 
+                                style="padding: 0.375rem 0.75rem;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Remove from temp list
+    window.removeFromTempList = function(index) {
+        tempProductList.splice(index, 1);
+        renderTempProductList();
+        updateSelectedCount();
+    };
+
+    // Update selected count
+    function updateSelectedCount() {
+        const countSpan = document.getElementById('selectedCount');
+        if (countSpan) {
+            countSpan.textContent = tempProductList.length;
+        }
+    }
+
+    // Save flash sale
+    async function saveFlashSale(e) {
+        e.preventDefault();
+
+        // Manual validation
+        const tenFlashSale = document.getElementById('tenFlashSale').value.trim();
+        const ngayBatDau = document.getElementById('ngayBatDau').value;
+        const ngayKetThuc = document.getElementById('ngayKetThuc').value;
+        const vungId = document.getElementById('vungId').value;
+        const trangThai = document.getElementById('trangThai').value;
+
+        if (!tenFlashSale) {
+            Swal.fire('Lỗi', 'Vui lòng nhập tên flash sale', 'error');
+            document.getElementById('tenFlashSale').focus();
+            return;
+        }
+
+        if (!vungId) {
+            Swal.fire('Lỗi', 'Vui lòng chọn vùng áp dụng', 'error');
+            document.getElementById('vungId').focus();
+            return;
+        }
+
+        if (!ngayBatDau) {
+            Swal.fire('Lỗi', 'Vui lòng chọn ngày bắt đầu', 'error');
+            document.getElementById('ngayBatDau').focus();
+            return;
+        }
+
+        if (!ngayKetThuc) {
+            Swal.fire('Lỗi', 'Vui lòng chọn ngày kết thúc', 'error');
+            document.getElementById('ngayKetThuc').focus();
+            return;
+        }
+
+        if (!trangThai) {
+            Swal.fire('Lỗi', 'Vui lòng chọn trạng thái', 'error');
+            document.getElementById('trangThai').focus();
+            return;
+        }
+
+        if (new Date(ngayKetThuc) <= new Date(ngayBatDau)) {
+            Swal.fire('Lỗi', 'Ngày kết thúc phải sau ngày bắt đầu', 'error');
+            document.getElementById('ngayKetThuc').focus();
+            return;
+        }
+
+        if (tempProductList.length === 0) {
+            Swal.fire('Lỗi', 'Vui lòng thêm ít nhất 1 variant', 'error');
+            return;
+        }
+
+        const formData = {
+            ten_flash_sale: tenFlashSale,
+            mo_ta: document.getElementById('moTa').value,
+            ngay_bat_dau: ngayBatDau,
+            ngay_ket_thuc: ngayKetThuc,
+            vung_id: vungId,
+            trang_thai: trangThai,
+            variants: tempProductList.map(item => ({
+                id: item.id, // ID của flash_sale_item (undefined nếu là item mới)
+                variantId: item.variantId,
+                gia_goc: item.gia_goc,
+                gia_flash_sale: item.gia_flash_sale,
+                so_luong_ton: item.so_luong_ton,
+                gioi_han_mua: item.gioi_han_mua,
+                thu_tu: item.thu_tu || 0,
+                trang_thai: item.trang_thai || 'dang_ban'
+            }))
+        };
+
+        console.log('Submitting flash sale data:', formData);  
+        console.log('Current flash sale ID:', currentFlashSaleId);
+
+        try {
+            const url = currentFlashSaleId 
+                ? `/api/flash-sales/${currentFlashSaleId}` 
+                : '/api/flash-sales';
+            
+            const method = currentFlashSaleId ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to save flash sale');
+            }
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Flash sale đã được lưu',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            
+            modal.hide();
+            loadFlashSalesData();
+        } catch (error) {
+            console.error('Error saving flash sale:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                html: `<p>Không thể lưu flash sale</p><p class="text-muted" style="font-size: 0.9em;">${error.message}</p>`,
+                confirmButtonText: 'Đóng'
+            });
+        }
+    }
+
+    // View flash sale products
+    async function viewFlashSaleProducts(id) {
+        try {
+            const response = await fetch(`/api/flash-sales/${id}/items`);
+            
+            let items = [];
+            if (response.ok) {
+                const data = await response.json();
+                // Handle different response structures
+                items = Array.isArray(data) ? data : (data.data || data.items || []);
+            } else {
+                console.warn('API returned non-OK status:', response.status);
+                // If API fails, try to continue with empty array
+                items = [];
+            }
+            
+            const tbody = document.getElementById('viewProductsTableBody');
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5"><i class="fas fa-inbox fa-3x text-muted mb-3" style="display: block; opacity: 0.3;"></i><p class="text-muted mt-3">Chưa có variant nào</p></td></tr>';
+            } else {
+                tbody.innerHTML = items.map((item, index) => `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td style="text-align: left; font-weight: 600;">${escapeHtml(item.ten_san_pham || '')}</td>
+                        <td>${escapeHtml(item.mau_sac || item.variant_name || '-')}</td>
+                        <td>${escapeHtml(item.dung_luong || item.ten_hien_thi || '-')}</td>
+                        <td style="text-align: right;">${formatCurrency(item.gia_goc || 0)}</td>
+                        <td style="text-align: right; color: var(--danger); font-weight: 700;">${formatCurrency(item.gia_flash_sale || 0)}</td>
+                        <td style="text-align: center;">${item.so_luong_ton || 0}</td>
+                        <td style="text-align: center;"><strong>${item.da_ban || 0}</strong></td>
+                        <td style="text-align: center;">${item.gioi_han_mua || 1}</td>
+                    </tr>
+                `).join('');
+            }
+
+            viewModal.show();
+        } catch (error) {
+            console.error('Error loading flash sale products:', error);
+            // Still show modal with empty message instead of error alert
+            const tbody = document.getElementById('viewProductsTableBody');
+            tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5"><i class="fas fa-exclamation-triangle fa-3x text-warning mb-3" style="display: block; opacity: 0.3;"></i><p class="text-muted mt-3">Không thể tải danh sách variants</p></td></tr>';
+            viewModal.show();
+        }
+    }
+
+    // ==========================================
+    // MODAL FUNCTIONS
+    // ==========================================
+    async function openFlashSaleModal(id = null) {
+        currentFlashSaleId = id;
+        tempProductList = [];
+        currentProductVariants = [];
+        currentProduct = null;
+
+        // Reset form
+        form.reset();
+        document.getElementById('selectedProductsTable').innerHTML = `
+            <tr class="empty-row">
+                <td colspan="6" class="text-center text-muted py-4">
+                    <i class="fas fa-inbox fa-2x mb-2" style="opacity: 0.3;"></i>
+                    <p>Chưa có variant nào được chọn</p>
+                </td>
+            </tr>`;
+        
+        // Reset textarea height
+        if (moTaTextarea) {
+            moTaTextarea.style.height = 'auto';
+        }
+        
+        if (productSearchInput) productSearchInput.value = '';
+        if (productSelect) productSelect.value = '';
+        if (productSelect) Array.from(productSelect.options).forEach(opt => opt.style.display = '');
+        if (variantsSection) variantsSection.style.display = 'none';
+        if (variantsTableBody) variantsTableBody.innerHTML = '';
+        if (selectAllVariants) selectAllVariants.checked = false;
+        updateSelectedCount();
+
+        if (id) {
+            document.getElementById('modalTitle').textContent = 'Chỉnh sửa Flash Sale';
+            await loadFlashSaleData(id);
+        } else {
+            document.getElementById('modalTitle').textContent = 'Tạo Flash Sale Mới';
+            const flashSaleIdInput = document.getElementById('flashSaleId');
+            if (flashSaleIdInput) flashSaleIdInput.value = '';
+        }
+
+        modal.show();
+    }
+
+    // Delete flash sale
+    async function deleteFlashSale(id) {
+        const result = await Swal.fire({
+            title: 'Xác nhận xóa?',
+            text: 'Flash sale sẽ bị xóa vĩnh viễn!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280'
+        });
+
+        if (!result.isConfirmed) return;
+
+        try {
+            const response = await fetch(`/api/flash-sales/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) throw new Error('Failed to delete flash sale');
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Đã xóa',
+                text: 'Flash sale đã được xóa',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            
+            loadFlashSalesData();
+        } catch (error) {
+            console.error('Error deleting flash sale:', error);
+            Swal.fire('Lỗi', 'Không thể xóa flash sale', 'error');
+        }
+    }
+
+    // ==========================================
+    // UTILITY FUNCTIONS
+    // ==========================================
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function formatDateTime(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleString('vi-VN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    function formatDateTimeLocal(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('vi-VN').format(amount) + '₫';
+    }
+
+    function getStatusText(status) {
+        switch(status) {
+            case 'cho': return 'Chờ';
+            case 'sap_dien_ra': return 'Sắp diễn ra';
+            case 'dang_dien_ra': return 'Đang diễn ra';
+            case 'da_ket_thuc': return 'Đã kết thúc';
+            case 'ket_thuc': return 'Kết thúc'; // Legacy support
+            default: return status;
+        }
+    }
+
+    function getStatusClass(status) {
+        switch(status) {
+            case 'dang_dien_ra': return 'success';
+            case 'sap_dien_ra': return 'warning';
+            case 'cho': return 'info';
+            case 'da_ket_thuc': return 'secondary';
+            case 'ket_thuc': return 'secondary'; // Legacy support
+            default: return 'secondary';
+        }
+    }
+
+    function getStatusIcon(status) {
+        switch(status) {
+            case 'dang_dien_ra': return 'fas fa-play-circle';
+            case 'sap_dien_ra': return 'far fa-clock';
+            case 'cho': return 'fas fa-hourglass-half';
+            case 'da_ket_thuc': return 'fas fa-times-circle';
+            case 'ket_thuc': return 'fas fa-check-circle'; // Legacy support
+            default: return 'fas fa-circle';
+        }
+    }
+
+    function getRegionBadge(vungId) {
+        const badges = {
+            'bac': '<span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">🔵 Miền Bắc</span>',
+            'trung': '<span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">🟠 Miền Trung</span>',
+            'nam': '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">🟢 Miền Nam</span>'
+        };
+        return badges[vungId] || '<span class="badge">N/A</span>';
+    }
+});
+</script>

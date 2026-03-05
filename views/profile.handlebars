@@ -1,0 +1,723 @@
+<!-- Profile Header Banner -->
+<div class="profile-banner">
+    <div class="container">
+        <div class="profile-header-content">
+            <div class="avatar-wrapper">
+                <div class="avatar-circle" id="avatarCircle">
+                    <span id="avatarInitials">U</span>
+                </div>
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-name mb-1" id="profileName">Đang tải...</h2>
+                <p class="profile-email mb-2" id="profileEmail">email@example.com</p>
+                <span class="badge status-badge" id="profileStatus">
+                    <i class="fas fa-check-circle me-1"></i>Đã xác thực
+                </span>
+            </div>
+            <div class="profile-actions ms-auto">
+                <button class="btn btn-outline-light btn-sm" id="btnProfileLogout">
+                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Profile Information Card -->
+        <div class="col-lg-8">
+            <div class="profile-card">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-circle text-primary me-2"></i>
+                        Thông tin cá nhân
+                    </h5>
+                </div>
+                <div class="card-body-custom">
+                    <form id="profileForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-id-card text-muted me-2"></i>Họ và tên
+                                </label>
+                                <input type="text" class="form-control form-control-modern" 
+                                       id="inputHoTen" placeholder="Nhập họ tên">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope text-muted me-2"></i>Email
+                                </label>
+                                <input type="email" class="form-control form-control-modern" 
+                                       id="inputEmail" readonly>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-phone text-muted me-2"></i>Số điện thoại
+                                </label>
+                                <input type="tel" class="form-control form-control-modern" 
+                                       id="inputPhone" placeholder="Nhập số điện thoại">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fas fa-map-marker-alt text-muted me-2"></i>Vùng miền
+                                </label>
+                                <select class="form-select form-control-modern" id="inputVung">
+                                    <option value="bac">Miền Bắc</option>
+                                    <option value="trung">Miền Trung</option>
+                                    <option value="nam">Miền Nam</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">
+                                    <i class="fas fa-home text-muted me-2"></i>Địa chỉ
+                                </label>
+                                <textarea class="form-control form-control-modern" 
+                                          id="inputDiaChi" rows="2" 
+                                          placeholder="Nhập địa chỉ chi tiết"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-modern px-4">
+                                <i class="fas fa-save me-2"></i>Lưu thay đổi
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-modern px-4" 
+                                    onclick="loadUserProfile()">
+                                <i class="fas fa-undo me-2"></i>Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Account Info -->
+            <div class="profile-card mb-4">
+                <div class="card-header-custom">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle text-info me-2"></i>Thông tin tài khoản
+                    </h6>
+                </div>
+                <div class="card-body-custom">
+                    <div class="info-item">
+                        <i class="fas fa-calendar-alt text-muted"></i>
+                        <div>
+                            <small class="text-muted d-block">Ngày đăng ký</small>
+                            <span id="inputNgayDangKy" class="fw-semibold">--/--/----</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-shield-alt text-success"></i>
+                        <div>
+                            <small class="text-muted d-block">Trạng thái</small>
+                            <span class="fw-semibold text-success">Đã xác thực</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Change Password -->
+            <div class="profile-card">
+                <div class="card-header-custom">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lock text-warning me-2"></i>Đổi mật khẩu
+                    </h6>
+                </div>
+                <div class="card-body-custom">
+                    <form id="changePasswordForm">
+                        <div class="mb-3">
+                            <label class="form-label small">Mật khẩu hiện tại</label>
+                            <input type="password" class="form-control form-control-modern form-control-sm" 
+                                   id="currentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Mật khẩu mới</label>
+                            <input type="password" class="form-control form-control-modern form-control-sm" 
+                                   id="newPassword" required minlength="6">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Xác nhận mật khẩu</label>
+                            <input type="password" class="form-control form-control-modern form-control-sm" 
+                                   id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-modern w-100">
+                            <i class="fas fa-key me-2"></i>Đổi mật khẩu
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// Require login for this page
+if (!AuthHelper.requireLogin()) {
+    // Will redirect to login if not authenticated
+}
+
+// Load user profile from database using session info
+async function loadUserProfile() {
+    // Get user session (only id and email)
+    const userSession = AuthHelper.getCurrentUser();
+    
+    if (!userSession || !userSession.id) {
+        console.error('❌ No user session found');
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.'
+        }).then(() => {
+            window.location.href = '/login';
+        });
+        return;
+    }
+    
+    console.log('🔄 Loading profile from database using email:', userSession.email);
+    
+    try {
+        // Query database by EMAIL to get full user info
+        const encodedEmail = encodeURIComponent(userSession.email);
+        const response = await fetch('/api/profile/by-email/' + encodedEmail, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AuthHelper.getAuthToken()
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            const userData = result.data.user;
+            const extendedData = result.data.extendedProfile;
+            
+            console.log('✅ Profile data loaded from DB:', userData);
+            
+            // Update sidebar
+            const initials = (userData.ho_ten || userData.email).substring(0, 2).toUpperCase();
+            document.getElementById('avatarInitials').textContent = initials;
+            document.getElementById('profileName').textContent = userData.ho_ten || 'Chưa cập nhật';
+            document.getElementById('profileEmail').textContent = userData.email;
+            
+            // Update form - SQL data
+            document.getElementById('inputHoTen').value = userData.ho_ten || '';
+            document.getElementById('inputEmail').value = userData.email || '';
+            document.getElementById('inputPhone').value = userData.so_dien_thoai || '';
+            document.getElementById('inputVung').value = userData.vung_id || 'bac';
+            
+            // Update form - Extended MongoDB data
+            if (extendedData) {
+                document.getElementById('inputDiaChi').value = extendedData.dia_chi || '';
+            } else {
+                document.getElementById('inputDiaChi').value = '';
+            }
+            
+            // Format registration date
+            if (userData.ngay_dang_ky) {
+                const date = new Date(userData.ngay_dang_ky);
+                document.getElementById('inputNgayDangKy').textContent = date.toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            }
+            
+        } else {
+            throw new Error(result.message || 'Không thể tải thông tin profile');
+        }
+        
+    } catch (error) {
+        console.error('❌ Load profile error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Không thể tải thông tin profile: ' + error.message
+        });
+    }
+}
+
+// Update profile
+document.getElementById('profileForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const userSession = AuthHelper.getCurrentUser();
+    
+    if (!userSession || !userSession.id) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Không tìm thấy thông tin người dùng'
+        });
+        return;
+    }
+    
+    const updateData = {
+        ho_ten: document.getElementById('inputHoTen').value.trim(),
+        so_dien_thoai: document.getElementById('inputPhone').value.trim(),
+        vung_id: document.getElementById('inputVung').value,
+        dia_chi: document.getElementById('inputDiaChi').value.trim()
+    };
+    
+    // Validate
+    if (!updateData.ho_ten) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cảnh báo',
+            text: 'Vui lòng nhập họ tên'
+        });
+        return;
+    }
+    
+    console.log('📤 Updating profile:', updateData);
+    
+    try {
+        const response = await fetch('/api/profile/' + userSession.id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AuthHelper.getAuthToken()
+            },
+            body: JSON.stringify(updateData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            console.log('✅ Profile updated:', result.data);
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Cập nhật thành công',
+                text: 'Thông tin của bạn đã được cập nhật',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            
+            // Reload profile sau khi update
+            setTimeout(() => loadUserProfile(), 500);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: result.message || 'Không thể cập nhật thông tin'
+            });
+        }
+    } catch (error) {
+        console.error('❌ Update error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Không thể kết nối đến server'
+        });
+    }
+});
+
+// Change password
+document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const userSession = AuthHelper.getCurrentUser();
+    
+    if (!userSession || !userSession.id) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Không tìm thấy thông tin người dùng'
+        });
+        return;
+    }
+    
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cảnh báo',
+            text: 'Vui lòng nhập đầy đủ thông tin'
+        });
+        return;
+    }
+    
+    if (newPassword !== confirmPassword) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Mật khẩu xác nhận không khớp'
+        });
+        return;
+    }
+    
+    if (newPassword.length < 6) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cảnh báo',
+            text: 'Mật khẩu mới phải có ít nhất 6 ký tự'
+        });
+        return;
+    }
+    
+    console.log('🔐 Changing password for user:', userSession.id);
+    
+    try {
+        const response = await fetch('/api/profile/' + userSession.id + '/change-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AuthHelper.getAuthToken()
+            },
+            body: JSON.stringify({
+                current_password: currentPassword,
+                new_password: newPassword
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            console.log('✅ Password changed successfully');
+            
+            // Clear form
+            document.getElementById('changePasswordForm').reset();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Đổi mật khẩu thành công. Vui lòng đăng nhập lại.',
+                confirmButtonText: 'Đăng nhập lại'
+            }).then(() => {
+                // Logout và redirect về login
+                AuthHelper.logout();
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: result.message || 'Không thể đổi mật khẩu'
+            });
+        }
+    } catch (error) {
+        console.error('❌ Change password error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: 'Không thể kết nối đến server'
+        });
+    }
+});
+
+// Logout button
+document.getElementById('btnProfileLogout').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    Swal.fire({
+        title: 'Đăng xuất',
+        text: 'Bạn có chắc muốn đăng xuất?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Đăng xuất',
+        cancelButtonText: 'Hủy',
+        confirmButtonColor: '#dc3545'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            AuthHelper.logout();
+        }
+    });
+});
+
+// Initialize - Load profile when page loads
+loadUserProfile();
+</script>
+
+<style>
+/* Profile Banner */
+.profile-banner {
+    background: linear-gradient(135deg, #D70018 0%, #c00016 100%);
+    padding: 3rem 0 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(215, 0, 24, 0.3);
+}
+
+.profile-header-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.avatar-wrapper {
+    position: relative;
+}
+
+.avatar-circle {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-circle:hover {
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.profile-email {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.status-badge {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.profile-actions .btn-outline-light {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.profile-actions .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+    transform: translateY(-2px);
+}
+
+/* Profile Cards */
+.profile-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border-color: #D70018;
+}
+
+.card-header-custom {
+    background: #f5f5f5;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.card-header-custom h5,
+.card-header-custom h6 {
+    margin: 0;
+    color: #2d3748;
+    font-weight: 700;
+}
+
+.card-body-custom {
+    padding: 1.5rem;
+}
+
+/* Modern Form Controls */
+.form-control-modern,
+.form-select {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-control-modern:focus,
+.form-select:focus {
+    background: white;
+    border-color: #D70018;
+    box-shadow: 0 0 0 3px rgba(215, 0, 24, 0.1);
+    outline: none;
+}
+
+.form-control-modern:read-only {
+    background: #e9ecef;
+    cursor: not-allowed;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-label i {
+    font-size: 0.85rem;
+}
+
+/* Modern Buttons */
+.btn-modern {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary.btn-modern {
+    background: #D70018;
+    box-shadow: 0 2px 8px rgba(215, 0, 24, 0.3);
+}
+
+.btn-primary.btn-modern:hover {
+    background: #c00016;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(215, 0, 24, 0.4);
+}
+
+.btn-outline-secondary.btn-modern {
+    border: 2px solid #cbd5e0;
+    color: #4a5568;
+    background: white;
+}
+
+.btn-outline-secondary.btn-modern:hover {
+    background: #f7fafc;
+    border-color: #a0aec0;
+    transform: translateY(-2px);
+}
+
+.btn-warning.btn-modern {
+    background: #D70018;
+    color: white;
+    box-shadow: 0 2px 8px rgba(215, 0, 24, 0.3);
+}
+
+.btn-warning.btn-modern:hover {
+    background: #c00016;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(215, 0, 24, 0.4);
+}
+
+/* Info Items */
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius:9f9f9;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.info-item:hover {
+    background: #fff;
+    border-color: #D70018
+
+.info-item i {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #f0f0f0;
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-actions {
+        margin: 0 !important;
+        width: 100%;
+    }
+    
+    .profile-actions .btn {
+        width: 100%;
+    }
+    
+    .avatar-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+    }
+    
+    .profile-name {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-card {
+    animation: fadeInUp 0.5s ease;
+}
+
+.profile-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+</style>
